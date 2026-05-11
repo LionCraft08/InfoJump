@@ -38,32 +38,32 @@ class MainOld : ApplicationAdapter() {
 
     override fun create() {
         shapeRenderer = ShapeRenderer()
-        playerTexture = Texture("hund.png")
-        spriteBatch = SpriteBatch()
+        //playerTexture = Texture("hund.png")
+        //spriteBatch = SpriteBatch()
         viewport = FitViewport(128f, 72f)
         viewport.camera.position.x
         backgroundTexture = Texture("background.jpg")
-        playerSprite = Sprite(playerTexture)
-        val playerWidthFactor = playerTexture.width/12f
-        val playerHeight = playerTexture.height/playerWidthFactor
-        val playerWidth = playerTexture.width/playerWidthFactor
-        playerSprite.setSize(playerWidth, playerHeight)
+//        playerSprite = Sprite(playerTexture)
+//        val playerWidthFactor = playerTexture.width/12f
+//        val playerHeight = playerTexture.height/playerWidthFactor
+//        val playerWidth = playerTexture.width/playerWidthFactor
+//        playerSprite.setSize(playerWidth, playerHeight)
 
-        Box2D.init()
-        world = World(Vector2(0f, -220f), true)
+       // Box2D.init()
+        world = World(Vector2(0f, -2f), true)
         debugRenderer = Box2DDebugRenderer()
 
         // 2. Create Ground Body (Static)
-        val groundBodyDef = BodyDef().apply {
-            type = BodyDef.BodyType.StaticBody
-            position.set(viewport.worldWidth / 2f, 0f)
-        }
-        val groundBody = world.createBody(groundBodyDef)
-        val groundShape = EdgeShape().apply {
-            set(-viewport.worldWidth / 2f, 0f, viewport.worldWidth / 2f, 0f)
-        }
-        groundBody.createFixture(groundShape, 0f)
-        groundShape.dispose()
+//        val groundBodyDef = BodyDef().apply {
+//            type = BodyDef.BodyType.StaticBody
+//            position.set(viewport.worldWidth / 2f, 0f)
+//        }
+//        val groundBody = world.createBody(groundBodyDef)
+//        val groundShape = EdgeShape().apply {
+//            set(-viewport.worldWidth / 2f, 0f, viewport.worldWidth / 2f, 0f)
+//        }
+//        groundBody.createFixture(groundShape, 0f)
+//        groundShape.dispose()
 
         // 3. Create a Box Platform (Static)
         val boxBodyDef = BodyDef().apply {
@@ -79,25 +79,25 @@ class MainOld : ApplicationAdapter() {
         boxShape.dispose()
 
         // 4. Create Player Body (Dynamic)
-        val playerBodyDef = BodyDef().apply {
-            type = BodyDef.BodyType.DynamicBody
-            position.set(viewport.worldWidth / 2f, 40f)
-            fixedRotation = true
-        }
-
-        playerBody = world.createBody(playerBodyDef)
-
-        val playerShape = PolygonShape().apply {
-            setAsBox(playerSprite.width / 2f, playerSprite.height / 2f)
-        }
-        val fixtureDef = FixtureDef().apply {
-            shape = playerShape
-            density = 1f
-            friction = 0f
-            restitution = 0f
-        }
-        playerBody.createFixture(fixtureDef)
-        playerShape.dispose()
+//        val playerBodyDef = BodyDef().apply {
+//            type = BodyDef.BodyType.DynamicBody
+//            position.set(viewport.worldWidth / 2f, 40f)
+//            fixedRotation = true
+//        }
+//
+//        playerBody = world.createBody(playerBodyDef)
+//
+//        val playerShape = PolygonShape().apply {
+//            setAsBox(playerSprite.width / 2f, playerSprite.height / 2f)
+//        }
+//        val fixtureDef = FixtureDef().apply {
+//            shape = playerShape
+//            density = 1f
+//            friction = 0f
+//            restitution = 0f
+//        }
+//        playerBody.createFixture(fixtureDef)
+//        playerShape.dispose()
     }
 
     override fun render() {
@@ -107,27 +107,7 @@ class MainOld : ApplicationAdapter() {
     }
 
     private fun input() {
-        val velocity = playerBody.linearVelocity
-        val jumpImpulse = 16000f
-        val moveSpeed = 40f
 
-        var horizontalDirection = 0f
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            horizontalDirection -= 1f
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            horizontalDirection += 1f
-        }
-
-        // Set horizontal velocity directly for instant movement
-        playerBody.setLinearVelocity(horizontalDirection * moveSpeed, velocity.y)
-
-
-
-
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && Math.abs(velocity.y) < 0.1f) {
-            playerBody.applyLinearImpulse(0f, jumpImpulse, playerBody.worldCenter.x, playerBody.worldCenter.y, true)
-        }
 //
 //        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) ) {
 //            applyXMovement(moveSpeed, Input.Keys.LEFT)
@@ -148,15 +128,15 @@ class MainOld : ApplicationAdapter() {
     }
 
     private fun draw() {
-        ScreenUtils.clear(Color.BLACK)
-        viewport.apply()
+        //ScreenUtils.clear(Color.BLACK)
+        //viewport.apply(false)
 
-        // Draw background and player
-        spriteBatch.projectionMatrix = viewport.camera.combined
-        spriteBatch.begin()
-        spriteBatch.draw(backgroundTexture, 0f, 0f, 128f, 72f)
-        playerSprite.draw(spriteBatch)
-        spriteBatch.end()
+//        // Draw background and player
+//        spriteBatch.projectionMatrix = viewport.camera.combined
+//        spriteBatch.begin()
+//        spriteBatch.draw(backgroundTexture, 0f, 0f, 128f, 72f)
+//        playerSprite.draw(spriteBatch)
+//        spriteBatch.end()
 
         // Draw the box platform using ShapeRenderer
         shapeRenderer.projectionMatrix = viewport.camera.combined

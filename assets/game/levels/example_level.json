@@ -1,0 +1,19 @@
+{
+  "name": "Beispiel-Level",
+  "id": 1,
+  "spawnPoint": {
+    "x": 10.0,
+    "y": 20.0
+  },
+  "blocks": [
+    {
+      "texture": "game.objects.muenze",
+      "pos": {
+        "x": 50.0,
+        "y": 10.0
+      },
+      "width": 10,
+      "height": 5
+    }
+  ]
+}

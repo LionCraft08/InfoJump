@@ -5,7 +5,7 @@ class MenuView(
 ): AbstractView(
 
 ) {
-    override fun render(delta: Float) {
+    override fun render() {
 
     }
 
@@ -14,6 +14,10 @@ class MenuView(
     }
 
     override fun handleInput() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onResize(width: Int, height: Int) {
         TODO("Not yet implemented")
     }
 }

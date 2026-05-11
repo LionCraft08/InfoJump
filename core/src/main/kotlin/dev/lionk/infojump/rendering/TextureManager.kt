@@ -9,28 +9,34 @@ import java.io.File
 object TextureManager {
     private val textures = mutableMapOf<String, Texture>()
     private fun addTexture(name:String){
-        val path = name.replace(".", "/")
+        textures[name] = Texture(loadAsset(name, "png", "jpg", "jpeg"))
+    }
+
+    fun loadAsset(name:String, vararg filetypes: String): FileHandle{
+        val path = "assets\\"+name.replace(".", "\\")
         var file = File(path)
         if(!file.exists()){
-            file = File("$path.png")
+            for(filetype in filetypes){
+                file = File("$path.$filetype")
+                if(file.exists()){
+                    break
+                }
+            }
         }
         if(!file.exists()){
-            file = File("$path.jpg")
+            System.err.println(file.absolutePath)
+            throw IllegalArgumentException("Datei $name existiert nicht")
         }
-        if(!file.exists()){
-            file = File("$path.jpeg")
-        }
-        if(!file.exists()){
-            throw IllegalArgumentException("Texture $name existiert nicht")
-        }
-        textures[name] = Texture(FileHandle(file))
+        return FileHandle(file)
     }
 
 
     fun getTexture(name: String): Texture = textures.get(name) ?: throw IllegalArgumentException("Textur $name ist nicht geladen")
     fun loadTextures(){
-        addTexture("game.player.static")
-        addTexture("game.env.block.default")
+        addTexture("game.player.ninja")
+        addTexture("game.player.skelett")
+        addTexture("game.env.background")
+        addTexture("game.objects.muenze")
     }
 
 }

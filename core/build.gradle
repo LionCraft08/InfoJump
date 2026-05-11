@@ -11,6 +11,8 @@ dependencies {
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
   api project(':shared')
 
+  implementation 'com.google.code.gson:gson:2.14.0'
+
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
