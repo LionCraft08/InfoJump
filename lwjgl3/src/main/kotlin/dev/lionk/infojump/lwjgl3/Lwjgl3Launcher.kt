@@ -6,12 +6,14 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import dev.lionk.infojump.Main
 
+
+lateinit var lwjgl3 : Lwjgl3Application
 /** Launches the desktop (LWJGL3) application. */
 fun main() {
     // This handles macOS support and helps on Windows.
     if (StartupHelper.startNewJvmIfRequired())
       return
-    Lwjgl3Application(Main(), Lwjgl3ApplicationConfiguration().apply {
+    lwjgl3 = Lwjgl3Application(Main(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("InfoJump")
         //// Vsync limits the frames per second to what your hardware can display, and helps eliminate
         //// screen tearing. This setting doesn't always work on Linux, so the line after is a safeguard.
@@ -40,4 +42,5 @@ fun main() {
 //        setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.ANGLE_GLES20, 0, 0)
 
     })
+
 }

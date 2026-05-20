@@ -1,34 +1,36 @@
 package dev.lionk.infojump.blocks
 
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.Shape
 import dev.lionk.infojump.logic.PhysicsEngine
 
-class StaticBlock(
+class PassthroughBlock(
+    onTouch: String?=null,
     physicsEngine: PhysicsEngine,
     texture: String,
     pos: Vector2,
     width: Float?=null,
     height: Float,
     rotation: Float?=null,
-    private val friction: Float?=null,
-    private val restitution: Float?=null,
 ): AbstractBlock(
     physicsEngine = physicsEngine,
     textureID = texture,
     initialPosition = pos,
     actualWidth = width,
     actualHeight = height,
-    angle = rotation
+    angle = rotation ?: 0f,
+    onTouch = onTouch,
 ) {
-    override fun createFixture(shape: Shape): FixtureDef {
-        return super.createFixture(shape).apply {
-            isSensor = false
-            friction = this@StaticBlock.friction?:0f
-            restitution = this@StaticBlock.restitution?:0f
-        }
+    init {
+
     }
 
+    override fun createFixture(shape: Shape): FixtureDef {
+        return FixtureDef().apply {
+            this.shape = shape
+            density = 1f
+            isSensor = true
+        }
+    }
 }

@@ -21,26 +21,21 @@ class GameView: AbstractView() {
     val camera = OrthographicCamera()
     val viewport = FitViewport(128f, 72f, camera)
     private var debugRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
-    var player : PlayerEntity
     private var spriteBatch: SpriteBatch = SpriteBatch()
     private var level: Level= LevelLoader.loadLevel("example_level")
 
-    init {
-        player=PlayerEntity(level.physicsEngine)
-    }
 
     override fun render() {
         ScreenUtils.clear(Color.BLACK)
 
         viewport.apply()
         camera.update()
-        camera.position.x = MathUtils.lerp(camera.position.x, player.body.position.x, 0.05f);
+        camera.position.x = MathUtils.lerp(camera.position.x, level.player.body.position.x, 0.05f);
         // Draw background and player
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin()
         spriteBatch.draw(TextureManager.getTexture("game.env.background"), 0f, 0f, viewport.worldWidth, viewport.worldHeight)
         level.render(spriteBatch)
-        player.render(spriteBatch)
         spriteBatch.end()
 
         debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
@@ -51,25 +46,34 @@ class GameView: AbstractView() {
         spriteBatch.dispose()
     }
 
+    private var lastJumpTick:Long = 0
+
     override fun handleInput() {
-        val velocity = player.body.linearVelocity
-        val jumpImpulse = 6000f
-        val moveSpeed = 38f
+        val velocity = level.player.body.linearVelocity
+        val jumpImpulse = level.jumpStrength
+        val moveSpeed = level.moveSpeed
 
         var horizontalDirection = 0f
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             horizontalDirection -= 1f
+            level.player.setWalkDirection(left=true)
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             horizontalDirection += 1f
+            level.player.setWalkDirection(left=false)
         }
 
-        player.body.setLinearVelocity(horizontalDirection * moveSpeed, velocity.y)
+        level.player.body.setLinearVelocity(horizontalDirection * moveSpeed, velocity.y)
 
 
         // Jump
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && level.physicsEngine.contactListener.footContacts > 0) {
-            player.body.applyLinearImpulse(0f, jumpImpulse, player.body.worldCenter.x, player.body.worldCenter.y, true)
+        if (
+            Gdx.input.isKeyPressed(Input.Keys.UP)
+            && level.physicsEngine.contactListener.footContacts > 0
+            && System.currentTimeMillis() - lastJumpTick > 50
+        ) {
+            level.player.body.applyLinearImpulse(0f, jumpImpulse, level.player.body.worldCenter.x, level.player.body.worldCenter.y, true)
+            lastJumpTick = System.currentTimeMillis()
         }
 
         level.physicsEngine.update(Gdx.graphics.deltaTime)

@@ -16,6 +16,7 @@ abstract class Entity (
     fixedRotation: Boolean = true,
     initialPosition: Vector2 = Vector2(0f, 20f),
     actualWidth: Float? = null,
+    description: String?=null,
     actualHeight: Float = 10f
 ){
 
@@ -40,6 +41,7 @@ abstract class Entity (
 
         val shape = PolygonShape().apply {
             setAsBox(sprite.width / 2f, sprite.height / 2f)
+
         }
         val fixtureDef = FixtureDef().apply {
             this.shape = shape
@@ -48,12 +50,16 @@ abstract class Entity (
             restitution = 0f
         }
 
-        body.createFixture(fixtureDef)
+        body.createFixture(fixtureDef).apply {
+            if(description != null) {
+                userData = description
+            }
+        }
 
         shape.dispose()
     }
 
-    fun render(spriteBatch: SpriteBatch){
+    open fun render(spriteBatch: SpriteBatch){
         sprite.setPosition(
             body.position.x - sprite.width / 2f,
             body.position.y - sprite.height / 2f

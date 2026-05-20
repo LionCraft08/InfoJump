@@ -27,16 +27,58 @@ object TextureManager {
             System.err.println(file.absolutePath)
             throw IllegalArgumentException("Datei $name existiert nicht")
         }
+        println("Loading $file as $name")
         return FileHandle(file)
     }
 
+    fun getTextureSet(name:String): List<Texture>{
+        val list = mutableListOf(getTexture(name))
+        try {
+            var id = 2
+            while (true){
+                list.add(getTexture("$name$id"))
+                id++
+            }
+        }catch (e:IllegalArgumentException){}
+        return list
+    }
 
-    fun getTexture(name: String): Texture = textures.get(name) ?: throw IllegalArgumentException("Textur $name ist nicht geladen")
+    fun getTexture(name: String): Texture = textures[name] ?: throw IllegalArgumentException("Textur $name ist nicht geladen")
     fun loadTextures(){
-        addTexture("game.player.ninja")
-        addTexture("game.player.skelett")
-        addTexture("game.env.background")
-        addTexture("game.objects.muenze")
+        val availableTextures = loadAssetsRecursively(
+            FileHandle("assets\\game"),
+            "png", "jpg", "jpeg"
+        )
+
+        availableTextures.forEach {
+            addTexture(it.pathWithoutExtension()
+                .replace("\\", ".")
+                .replace("/", ".")
+                .replaceFirst("assets.", ""))
+        }
+
+//        addTexture("game.player.ninja")
+//        addTexture("game.player.skelett")
+//        addTexture("game.env.background")
+//        addTexture("game.objects.muenze")
+        FileHandle("assets\\menu").list().forEach {
+            if(it.extension().endsWith("png")){
+                addTexture("menu.${it.nameWithoutExtension()}")
+            }
+        }
+    }
+    private fun loadAssetsRecursively(file: FileHandle, vararg filetypes: String): List<FileHandle>{
+        val list = mutableListOf<FileHandle>()
+        if(!file.exists()) return list
+        if(file.isDirectory){
+            file.list().forEach {
+                list.addAll(loadAssetsRecursively(it, *filetypes))
+            }
+        }else if(filetypes.contains(file.extension())){
+            list.add(file)
+            println("Loaded ${file.pathWithoutExtension()}")
+        }
+        return list
     }
 
 }

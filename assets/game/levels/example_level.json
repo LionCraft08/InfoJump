@@ -5,13 +5,51 @@
     "x": 10.0,
     "y": 20.0
   },
+  "gravity": -240.0,
+  "player": {
+    "texture": "game.player.ninja",
+    "jumpStrength": 8000.0,
+    "moveSpeed": 37.0
+  },
+  "sublevels": [
+    {
+      "path": "game.levels.example_sublevel",
+      "pos": {
+        "x": 100.0,
+        "y": 0.0
+      }
+
+    }
+  ],
+  "nonSolidBlocks": [
+    {
+      "texture": "game.objects.fluids.lava_block",
+      "pos": {
+        "x": 100.0,
+        "y": 5.0
+      },
+      "onTouch": "goToMenu",
+      "width": 10,
+      "height": 5
+    }
+  ],
   "blocks": [
     {
       "texture": "game.objects.muenze",
       "pos": {
         "x": 50.0,
-        "y": 10.0
+        "y": 5.0
       },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 55.0,
+        "y": 5.0
+      },
+      "rotation": 45,
       "width": 10,
       "height": 5
     }
