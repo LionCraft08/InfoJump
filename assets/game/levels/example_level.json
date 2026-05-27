@@ -28,7 +28,17 @@
         "x": 100.0,
         "y": 5.0
       },
-      "onTouch": "goToMenu",
+      "onTouch": "zumLetztenCheckpoint",
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 50.0,
+        "y": 10.0
+      },
+      "onTouch": "checkpointSetzen",
       "width": 10,
       "height": 5
     }

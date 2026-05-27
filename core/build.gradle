@@ -9,8 +9,10 @@ dependencies {
   api "com.github.MrStahlfelge.gdx-websockets:core:$websocketVersion"
   api "com.github.crykn:kryonet:$kryoNetVersion"
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   api project(':shared')
 
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
   implementation 'com.google.code.gson:gson:2.14.0'
 
   if(enableGraalNative == 'true') {

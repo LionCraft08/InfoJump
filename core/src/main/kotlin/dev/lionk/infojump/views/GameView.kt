@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
@@ -16,13 +17,17 @@ import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.level.LevelLoader
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.views.components.UI
 
 class GameView: AbstractView() {
     val camera = OrthographicCamera()
     val viewport = FitViewport(128f, 72f, camera)
     private var debugRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
     private var spriteBatch: SpriteBatch = SpriteBatch()
-    private var level: Level= LevelLoader.loadLevel("example_level")
+    val ui : UI = UI()
+    var level: Level= LevelLoader.loadLevel("example_level")
+        private set
+
 
 
     override fun render() {
@@ -38,12 +43,15 @@ class GameView: AbstractView() {
         level.render(spriteBatch)
         spriteBatch.end()
 
-        debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
+        //debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
+        ui.render()
+        // UI rendering
 
     }
 
     override fun dispose() {
         spriteBatch.dispose()
+        ui.dispose()
     }
 
     private var lastJumpTick:Long = 0
@@ -81,6 +89,8 @@ class GameView: AbstractView() {
 
     override fun onResize(width: Int, height: Int) {
         viewport.update(width, height, true)
+        // Update UI camera on resize as well
+        ui.onResize(width.toFloat(), height.toFloat())
     }
 
 

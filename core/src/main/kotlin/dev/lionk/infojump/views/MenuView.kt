@@ -1,8 +1,12 @@
 package dev.lionk.infojump.views
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.physics.box2d.Box2D
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -27,6 +31,7 @@ class MenuView(
 ) {
     var skin: Skin? = null
     var stage: Stage? = null
+    val font: BitmapFont
 
     val background: MenuBackground
 
@@ -38,9 +43,23 @@ class MenuView(
 
         skin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
+        //Font generator
+        val generator = FreeTypeFontGenerator(TextureManager.loadAsset("ui/pixelfont", "ttf"))
+        val parameter: FreeTypeFontGenerator.FreeTypeFontParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+        parameter.size = 32
+        parameter.color = Color.WHITE
+
+        parameter.borderWidth = 1f
+        parameter.borderColor = Color.BLACK
+
+        font = generator.generateFont(parameter)
+
+        generator.dispose()
+        //end
+
         val table = Table()
         table.setFillParent(false) // Make the table the size of the screen
-        table.setDebug(true)
+        //table.setDebug(true)
         table.isTransform = true
         table.rotation = 15f
         table.x = 300f
@@ -53,23 +72,17 @@ class MenuView(
 
         stage!!.addActor(table)
 
+        val textStyle = TextButton.TextButtonStyle(null, null, null, font)
+        val playButton = TextButton("Singleplayer", textStyle)
+        val settingsButton = TextButton("Einstellungen",textStyle)
 
 
-        // 5. Create a Button using a style defined in the Skin JSON
-        // "default" is the name of the style inside the JSON file
-        val playButton = TextButton("Singleplayer", skin, "default")
-        val settingsButton = TextButton("Einstellungen", skin, "default")
-
-
-        // Add a listener to handle clicks
         playButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 onStartGame()
             }
         })
-
-
-
+        playButton.setScale(2f)
 
 
         settingsButton.setX(100f, 1)
@@ -85,11 +98,9 @@ class MenuView(
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update logic (animations, etc.)
         background.render(Gdx.graphics.deltaTime)
         stage!!.act(Gdx.graphics.deltaTime/*.coerceAtMost(1 / 30f)*/);
 
-        // Draw the UI
         stage!!.draw();
 
         alpha += 0.01f

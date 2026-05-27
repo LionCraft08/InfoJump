@@ -1,12 +1,20 @@
 package dev.lionk.infojump.level
 
 import com.badlogic.gdx.math.Vector2
+import kotlin.math.abs
 
 data class Pos(
     val x: Float,
     val y: Float,
 ){
     fun toVector() = Vector2(x, y)
+    fun isNear(pos: Pos): Boolean{
+        return abs(this.x - pos.x) < 3 && abs(this.y - pos.y) < 3
+    }
+}
+
+fun Vector2.toPos(): Pos{
+    return Pos(x,y)
 }
 
 data class LevelPreset(

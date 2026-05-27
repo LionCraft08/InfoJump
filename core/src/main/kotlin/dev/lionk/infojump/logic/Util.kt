@@ -10,7 +10,7 @@ class MyContactListener : ContactListener {
     var footContacts = 0
 
     override fun beginContact(contact: Contact) {
-        if(hasData(contact, "feet")){
+        if(hasData(contact, "feet") && getOther(contact, "feet") == null){
             footContacts++
         }
         if(hasData(contact, "player")){
@@ -29,7 +29,7 @@ class MyContactListener : ContactListener {
     }
 
     override fun endContact(contact: Contact) {
-        if(hasData(contact, "feet")){
+        if(hasData(contact, "feet") && getOther(contact, "feet") == null){
             footContacts--
         }
         if(hasData(contact, "player")){

@@ -26,6 +26,10 @@ class Main : ApplicationAdapter() {
         }
     }
 
+    fun getView(): AbstractView {
+        return currentView
+    }
+
     fun changeView(view: String){
         val tmp = currentView;
         currentView = when(view.trim()){

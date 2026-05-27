@@ -59,6 +59,10 @@ abstract class Entity (
         shape.dispose()
     }
 
+    fun teleport(x: Float, y: Float){
+        body.setTransform(x, y, body.angle)
+    }
+
     open fun render(spriteBatch: SpriteBatch){
         sprite.setPosition(
             body.position.x - sprite.width / 2f,
@@ -69,6 +73,6 @@ abstract class Entity (
     }
 
     fun dispose(){
-
+        texture.dispose()
     }
 }
