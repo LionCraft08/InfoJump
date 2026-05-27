@@ -72,7 +72,7 @@ abstract class Entity (
         sprite.draw(spriteBatch)
     }
 
-    fun dispose(){
+    open fun dispose(){
         texture.dispose()
     }
 }

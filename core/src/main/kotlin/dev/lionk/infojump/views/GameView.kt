@@ -18,6 +18,7 @@ import dev.lionk.infojump.level.LevelLoader
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.components.UI
+import kotlin.math.abs
 
 class GameView: AbstractView() {
     val camera = OrthographicCamera()
@@ -29,13 +30,19 @@ class GameView: AbstractView() {
         private set
 
 
+    private var isMovingCam = false
+
 
     override fun render() {
         ScreenUtils.clear(Color.BLACK)
 
         viewport.apply()
         camera.update()
-        camera.position.x = MathUtils.lerp(camera.position.x, level.player.body.position.x, 0.05f);
+        if(!isMovingCam && abs(camera.position.x - level.player.body.position.x) > 40) isMovingCam = true
+        if(isMovingCam) {
+            camera.position.x = MathUtils.lerp(camera.position.x, level.player.body.position.x, 0.05f);
+            if(abs(camera.position.x - level.player.body.position.x) < 1) isMovingCam = false
+        }
         // Draw background and player
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin()
