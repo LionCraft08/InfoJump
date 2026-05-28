@@ -15,23 +15,22 @@
 
   "blocks": [
     {
-      "texture": "game.objects.blocks.holzblock",
+      "texture": "game.objects.blocks.holzblock_lang",
       "pos": {
         "x": 0.0,
-        "y": 5.0
+        "y": 0.0
       },
-      "width": 10,
-      "height": 5
+      "width": 80,
+      "height": 30
     },
     {
-      "texture": "game.objects.muenze",
+      "texture": "game.objects.blocks.holzblock_lang",
       "pos": {
-        "x": 100.0,
-        "y": 10.0
+        "x": 0.0,
+        "y": 60.0
       },
-      "rotation": 0,
-      "width": 10,
-      "height": 5
+      "width": 80,
+      "height": 50
     }
   ]
 }

@@ -11,16 +11,6 @@
     "jumpStrength": 8000.0,
     "moveSpeed": 37.0
   },
-  "sublevels": [
-    {
-      "path": "game.levels.example_sublevel",
-      "pos": {
-        "x": 100.0,
-        "y": 0.0
-      }
-
-    }
-  ],
   "nonSolidBlocks": [
     {
       "texture": "game.objects.fluids.lava_block",
@@ -28,27 +18,36 @@
         "x": 100.0,
         "y": 5.0
       },
-      "onTouch": "zumLetztenCheckpoint",
+      "onTouch": "goToMenu",
       "width": 10,
       "height": 5
-    },
+    }
+  ],
+  "sublevels": [
+    {
+      "path": "game.levels.sublevel_1",
+      "pos": {
+        "x": 180.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "blocks": [
     {
       "texture": "game.objects.blocks.holzblock",
       "pos": {
         "x": 50.0,
         "y": 10.0
       },
-      "onTouch": "checkpointSetzen",
       "width": 10,
-      "height": 5
-    }
-  ],
-  "blocks": [
+      "height": 5,
+      "rotation": 0
+    },
     {
-      "texture": "game.objects.muenze",
+      "texture": "game.objects.blocks.holzblock",
       "pos": {
-        "x": 50.0,
-        "y": 5.0
+        "x": 70.0,
+        "y": 15.0
       },
       "width": 10,
       "height": 5
@@ -56,10 +55,81 @@
     {
       "texture": "game.objects.blocks.holzblock",
       "pos": {
-        "x": 55.0,
-        "y": 5.0
+        "x": 100.0,
+        "y": 10.0
       },
-      "rotation": 45,
+      "width": 15,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock_lang",
+      "pos": {
+        "x": 260.0,
+        "y": 25.0
+      },
+      "width": 40,
+      "height": 10
+    },
+    {
+      "texture": "game.objects.blocks.holzblock_lang",
+      "pos": {
+        "x": 260.0,
+        "y": 47.0
+      },
+      "width": 40,
+      "height": 10
+    },
+    {
+      "texture": "game.objects.blocks.holzblock_lang",
+      "pos": {
+        "x": 320.0,
+        "y": 32.0
+      },
+      "width": 40,
+      "height": 10
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 360.0,
+        "y": 30.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock_lang",
+      "pos": {
+        "x": 320.0,
+        "y": 0.0
+      },
+      "width": 40,
+      "height": 10
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 380.0,
+        "y": 40.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 360.0,
+        "y": 0.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 380.0,
+        "y": 10.0
+      },
       "width": 10,
       "height": 5
     }

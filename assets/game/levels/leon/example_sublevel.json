@@ -11,17 +11,18 @@
     "jumpStrength": 8000.0,
     "moveSpeed": 37.0
   },
-  //Ab hier wirds relevant
-
+  "sublevels": [],
   "blocks": [
     {
       "texture": "game.objects.blocks.holzblock",
       "pos": {
-        "x": 0.0,
+        "x": 50.0,
         "y": 5.0
       },
       "width": 10,
-      "height": 5
+      "height": 5,
+      "friction": 0.5,
+      "restitution": 0.5
     },
     {
       "texture": "game.objects.muenze",
@@ -31,7 +32,9 @@
       },
       "rotation": 0,
       "width": 10,
-      "height": 5
+      "height": 5,
+      "friction": 1.0,
+      "restitution": 1.0
     }
   ]
 }
