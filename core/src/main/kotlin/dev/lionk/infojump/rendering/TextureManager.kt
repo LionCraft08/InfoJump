@@ -62,6 +62,8 @@ object TextureManager {
 //        addTexture("game.env.background")
         addTexture("ui.buttons.default")
         addTexture("ui.buttons.default_pressed")
+        addTexture("ui.buttons.haken")
+        addTexture("ui.buttons.kein_haken")
         FileHandle("assets\\menu").list().forEach {
             if(it.extension().endsWith("png")){
                 addTexture("menu.${it.nameWithoutExtension()}")

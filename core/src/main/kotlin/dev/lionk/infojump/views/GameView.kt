@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.viewport.FitViewport
 import dev.lionk.infojump.blocks.AbstractBlock
 import dev.lionk.infojump.blocks.FloorBody
+import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.entities.PlayerEntity
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.level.LevelLoader
@@ -47,7 +48,8 @@ class GameView: AbstractView() {
         level.render(spriteBatch, physicsAlpha)
         spriteBatch.end()
 
-        debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
+        if(Settings.isDebugging)
+            debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
         ui.render() //UI
 
         //Camera

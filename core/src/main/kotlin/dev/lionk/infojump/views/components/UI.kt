@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import dev.lionk.infojump.actions.ActionManager
+import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.logic.Timer
 import dev.lionk.infojump.rendering.TextureManager
@@ -55,6 +56,7 @@ class UI (
         Gdx.input.inputProcessor = stage
         val table = Table()
         table.setFillParent(true)
+        table.debug = Settings.isDebugging
         table.left()
 
         table.pad(20f)

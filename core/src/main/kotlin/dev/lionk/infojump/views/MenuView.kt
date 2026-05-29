@@ -3,35 +3,24 @@ package dev.lionk.infojump.views
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.NinePatch
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.physics.box2d.Box2D
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable
-import com.badlogic.gdx.scenes.scene2d.utils.UIUtils
-import com.badlogic.gdx.utils.viewport.FillViewport
-import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.badlogic.gdx.utils.viewport.Viewport
+import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.menu.MenuBackground
-import org.w3c.dom.Text
+import dev.lionk.infojump.views.menu.SettingsUI
 
 
 class MenuView(
-    val onStartGame: ()->Unit = {}
+    val onViewChange: (String)->Unit = {}
 ): AbstractView(
 
 ) {
@@ -43,6 +32,7 @@ class MenuView(
 
     val buttonBackground: NinePatchDrawable
     val buttonBackgroundHover: NinePatchDrawable
+    val settingsUI: SettingsUI
 
     init {
 
@@ -58,22 +48,17 @@ class MenuView(
             TextureManager.getTexture("ui.buttons.default_pressed"), 8, 8, 8, 8))
 
         //Font generator
-        val generator = FreeTypeFontGenerator(TextureManager.loadAsset("ui/pixelfont", "ttf"))
-        val parameter: FreeTypeFontGenerator.FreeTypeFontParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
-        parameter.size = 32
-        parameter.color = Color.WHITE
-
-        parameter.borderWidth = 1.3f
-        parameter.borderColor = Color.BLACK
-
-        font = generator.generateFont(parameter)
-
-        generator.dispose()
+        font = createFont(
+            size = 32,
+            color = Color.WHITE,
+            borderSize = 1.3f,
+            borderColor = Color.BLACK
+        )
         //end
 
         val table = Table()
         table.setFillParent(false)
-        //table.setDebug(true)
+        table.setDebug(Settings.isDebugging)
         table.isTransform = true
         table.rotation = 15f
         table.x = 300f
@@ -83,6 +68,8 @@ class MenuView(
         background = MenuBackground(stage!!)
 
         stage!!.addActor(table)
+
+        settingsUI = SettingsUI(stage!!)
 
         val textStyle = TextButton.TextButtonStyle(null, null, null, font)
         textStyle.overFontColor = Color.SKY
@@ -94,7 +81,12 @@ class MenuView(
 
         playButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                onStartGame()
+                onViewChange("game")
+            }
+        })
+        settingsButton.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                settingsUI.toggle()
             }
         })
 

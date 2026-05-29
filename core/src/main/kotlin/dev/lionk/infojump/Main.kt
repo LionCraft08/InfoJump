@@ -1,8 +1,6 @@
 package dev.lionk.infojump
 
-import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Game
-import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.physics.box2d.Box2D
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.AbstractView
@@ -43,7 +41,7 @@ class Main : Game() {
         }
         currentView.onResize(width, height)
 
-        tmp?.dispose()
+        tmp.dispose()
     }
 
     override fun render() {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 
@@ -45,7 +46,7 @@ class PlayerEntity (
     }
 
     fun colorSprite(){
-        sprite.setColor(1f, 0f, 0f, 1f)
+        sprite.setColor(Settings.playerColor)
     }
 
     override fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){

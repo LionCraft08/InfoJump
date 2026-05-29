@@ -19,13 +19,16 @@ game/objects/fluids/magma_block.png
 game/objects/fluids/magma_stange.png
 game/objects/goldapfel.png
 game/objects/herz.png
+game/objects/herz_weg.png
 game/objects/info.txt
 game/objects/muenze.png
+game/player/ninja - Kopie.png
 game/player/ninja.png
+game/player/ninja_mirrored - Kopie.png
 game/player/ninja_mirrored.png
 game/player/ninja_overlay.png
 game/player/ninja_overlay_mirrored.png
-game/player/ninja_preset.png
+game/player/ninja_preset2.png
 game/player/skelett.png
 game/player/skelett2.png
 game/player/static.png
@@ -34,6 +37,8 @@ menu/background.png
 menu/background2.png
 ui/buttons/default.png
 ui/buttons/default_pressed.png
+ui/buttons/haken.png
+ui/buttons/kein_haken.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt
