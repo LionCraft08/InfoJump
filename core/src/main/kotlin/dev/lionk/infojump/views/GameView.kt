@@ -25,9 +25,9 @@ class GameView: AbstractView() {
     val viewport = FitViewport(128f, 72f, camera)
     private var debugRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
     private var spriteBatch: SpriteBatch = SpriteBatch()
-    val ui : UI = UI()
     var level: Level= LevelLoader.loadLevel("example_level")
         private set
+    val ui : UI = UI(level)
 
 
     private var isMovingCam = false

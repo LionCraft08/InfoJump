@@ -60,7 +60,8 @@ object TextureManager {
 //        addTexture("game.player.ninja")
 //        addTexture("game.player.skelett")
 //        addTexture("game.env.background")
-//        addTexture("game.objects.muenze")
+        addTexture("ui.buttons.default")
+        addTexture("ui.buttons.default_pressed")
         FileHandle("assets\\menu").list().forEach {
             if(it.extension().endsWith("png")){
                 addTexture("menu.${it.nameWithoutExtension()}")

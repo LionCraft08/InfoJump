@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.physics.box2d.Box2D
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -15,6 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
@@ -22,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.menu.MenuBackground
+import org.w3c.dom.Text
 
 
 class MenuView(
@@ -35,6 +41,9 @@ class MenuView(
 
     val background: MenuBackground
 
+    val buttonBackground: NinePatchDrawable
+    val buttonBackgroundHover: NinePatchDrawable
+
     init {
 
         stage = Stage(ScreenViewport())
@@ -43,13 +52,18 @@ class MenuView(
 
         skin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
+        buttonBackground = NinePatchDrawable(NinePatch(
+            TextureManager.getTexture("ui.buttons.default"), 8, 8, 8, 8))
+        buttonBackgroundHover = NinePatchDrawable(NinePatch(
+            TextureManager.getTexture("ui.buttons.default_pressed"), 8, 8, 8, 8))
+
         //Font generator
         val generator = FreeTypeFontGenerator(TextureManager.loadAsset("ui/pixelfont", "ttf"))
         val parameter: FreeTypeFontGenerator.FreeTypeFontParameter = FreeTypeFontGenerator.FreeTypeFontParameter()
         parameter.size = 32
         parameter.color = Color.WHITE
 
-        parameter.borderWidth = 1f
+        parameter.borderWidth = 1.3f
         parameter.borderColor = Color.BLACK
 
         font = generator.generateFont(parameter)
@@ -58,21 +72,22 @@ class MenuView(
         //end
 
         val table = Table()
-        table.setFillParent(false) // Make the table the size of the screen
+        table.setFillParent(false)
         //table.setDebug(true)
         table.isTransform = true
         table.rotation = 15f
         table.x = 300f
         table.y = 300f
         table.scaleBy(2f)
-        //table.scaleBy(stage!!.width/640, stage!!.height/480)
-        //table.setOrigin(table.width, table.height)
 
         background = MenuBackground(stage!!)
 
         stage!!.addActor(table)
 
         val textStyle = TextButton.TextButtonStyle(null, null, null, font)
+        textStyle.overFontColor = Color.SKY
+        textStyle.up = buttonBackground
+        textStyle.over = buttonBackgroundHover
         val playButton = TextButton("Singleplayer", textStyle)
         val settingsButton = TextButton("Einstellungen",textStyle)
 
@@ -82,14 +97,12 @@ class MenuView(
                 onStartGame()
             }
         })
-        playButton.setScale(2f)
 
-
-        settingsButton.setX(100f, 1)
+        //settingsButton.setX(100f, 1)
         // Add the button to the table
-        table.add(playButton).fillX().uniformX()
+        table.add(playButton).fillX().uniformX().pad(10f)//.actor.background(buttonBackground)
         table.row()
-        table.add(settingsButton).width(100f).uniformX()
+        table.add(settingsButton).fillX().uniformX().pad(10f)
     }
 
     private var alpha = 0f

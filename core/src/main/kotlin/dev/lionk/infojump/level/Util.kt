@@ -21,6 +21,7 @@ data class LevelPreset(
     val name: String,
     val id: Int,
     val spawnPoint: Pos,
+    val buttons:List<String>?=null,
     val gravity: Float,
     val player: PlayerConfig,
     val sublevels:List<Sublevel>?=null,

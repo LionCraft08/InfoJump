@@ -25,6 +25,7 @@ class Level (
         if(levelPreset == null) {
             PhysicsEngine()
         }else PhysicsEngine(levelPreset.gravity)
+    val menuButtons:List<String>?=levelPreset?.buttons
 
     init {
         player = PlayerEntity(physicsEngine = physicsEngine, initialPosition = spawnPos.toVector())
