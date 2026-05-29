@@ -36,32 +36,39 @@ class GameView: AbstractView() {
     override fun render() {
         ScreenUtils.clear(Color.BLACK)
 
+        //println("FPS: " + Gdx.graphics.getFramesPerSecond() + " | DT: " + Gdx.graphics.getDeltaTime());
+
         viewport.apply()
+
+        // Draw background and player
+        spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin()
+        spriteBatch.draw(TextureManager.getTexture("game.env.background"), 0f, 0f, viewport.worldWidth, viewport.worldHeight)
+        level.render(spriteBatch, physicsAlpha)
+        spriteBatch.end()
+
+        debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
+        ui.render() //UI
+
+        //Camera
         camera.update()
         if(!isMovingCam && abs(camera.position.x - level.player.body.position.x) > 40) isMovingCam = true
         if(isMovingCam) {
             camera.position.x = MathUtils.lerp(camera.position.x, level.player.body.position.x, 0.05f);
             if(abs(camera.position.x - level.player.body.position.x) < 1) isMovingCam = false
         }
-        // Draw background and player
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin()
-        spriteBatch.draw(TextureManager.getTexture("game.env.background"), 0f, 0f, viewport.worldWidth, viewport.worldHeight)
-        level.render(spriteBatch)
-        spriteBatch.end()
-
-        //debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
-        ui.render()
-        // UI rendering
 
     }
 
     override fun dispose() {
         spriteBatch.dispose()
         ui.dispose()
+        level.dispose()
+        debugRenderer.dispose()
     }
 
     private var lastJumpTick:Long = 0
+    private var physicsAlpha: Float = 0f
 
     override fun handleInput() {
         val velocity = level.player.body.linearVelocity
@@ -91,7 +98,7 @@ class GameView: AbstractView() {
             lastJumpTick = System.currentTimeMillis()
         }
 
-        level.physicsEngine.update(Gdx.graphics.deltaTime)
+        physicsAlpha = level.physicsEngine.update(Gdx.graphics.deltaTime)
     }
 
     override fun onResize(width: Int, height: Int) {

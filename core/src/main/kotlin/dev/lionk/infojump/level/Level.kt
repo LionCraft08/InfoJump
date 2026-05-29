@@ -36,9 +36,17 @@ class Level (
         blocks.add(block)
     }
 
-    fun render(spriteBatch: SpriteBatch) {
+    fun dispose(){
+        physicsEngine.dispose()
+        player.dispose()
+        blocks.forEach { it.dispose() }
+        entities.forEach { it.dispose() }
+        skin.dispose()
+    }
+
+    fun render(spriteBatch: SpriteBatch, physicsAlpha: Float) {
         blocks.forEach { it.render(spriteBatch) }
-        entities.forEach { it.render(spriteBatch) }
-        player.render(spriteBatch)
+        entities.forEach { it.render(spriteBatch, physicsAlpha) }
+        player.render(spriteBatch, physicsAlpha)
     }
 }

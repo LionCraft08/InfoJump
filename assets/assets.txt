@@ -9,10 +9,16 @@ game/levels/leon/example_sublevel.json
 game/levels/sublevel_1.json
 game/objects/blocks/holzblock.png
 game/objects/blocks/holzblock_lang.png
+game/objects/blocks/rhörenblock_oben.png
+game/objects/blocks/rhörenblock_unten.png
+game/objects/blocks/röhre_oben.png
+game/objects/blocks/röhre_unten.png
 game/objects/fluids/lava_block.png
 game/objects/fluids/lava_stange.png
 game/objects/fluids/magma_block.png
 game/objects/fluids/magma_stange.png
+game/objects/goldapfel.png
+game/objects/herz.png
 game/objects/info.txt
 game/objects/muenze.png
 game/player/ninja.png

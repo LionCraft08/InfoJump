@@ -47,6 +47,7 @@ data class BlockPreset(
     val width:Float?=null,
     val height:Float,
     val rotation:Float?=null,
+    val fitSize: Boolean?=false,
     val restitution:Float?=null,
     val friction:Float?=null,
 )

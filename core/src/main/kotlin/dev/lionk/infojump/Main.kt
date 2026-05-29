@@ -9,7 +9,7 @@ import dev.lionk.infojump.views.AbstractView
 import dev.lionk.infojump.views.GameView
 import dev.lionk.infojump.views.MenuView
 
-class Main : ApplicationAdapter() {
+class Main : Game() {
     private lateinit var currentView: AbstractView
 
     init {
@@ -31,6 +31,7 @@ class Main : ApplicationAdapter() {
     }
 
     fun changeView(view: String){
+
         val tmp = currentView;
         currentView = when(view.trim()){
             "game" ->  GameView()

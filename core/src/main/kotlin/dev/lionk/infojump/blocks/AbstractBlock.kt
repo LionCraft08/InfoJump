@@ -21,32 +21,39 @@ abstract class AbstractBlock (
     physicsEngine: PhysicsEngine,
     fixedRotation: Boolean = true,
     initialPosition: Vector2 = Vector2(0f, 0f),
-    actualWidth: Float? = null,
+    var actualWidth: Float? = null,
     val angle:Float? = null, //In degree
+    val fitSize: Boolean = false,
     actualHeight: Float = 10f,
     onTouch: String?=null,
 ){
-    private val texture = TextureManager.getTexture(textureID)
-    val sprite = Sprite(texture)
+    private val texture = BlockTexture(TextureManager.getTexture(textureID), actualWidth, actualHeight, fitSize)
+    //val sprite = Sprite(texture)
     var body: Body
         private set
 
     init {
-        if(actualWidth == null) {
-            val textureFactor = actualHeight / texture.height
-            sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
-        }else sprite.setSize(actualWidth, actualHeight)
-
+//        if(fitSize) {
+//            if (actualWidth == null) {
+//                val textureFactor = actualHeight / texture.height
+//                actualWidth = texture.width * textureFactor
+//                sprite.setSize(actualWidth!!, texture.height * textureFactor)
+//            } else sprite.setSize(actualWidth!!, actualHeight)
+//        }else{
+//            val textureFactor = 10f / texture.width
+//            sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
+//        }
         //sprite.setSize(texture.width.toFloat(), texture.height.toFloat())
         val bodyDef = BodyDef()
         bodyDef.type = BodyDef.BodyType.StaticBody
         bodyDef.fixedRotation = fixedRotation
-        bodyDef.position.set(initialPosition)
+
+        bodyDef.position.set(initialPosition.add(texture.blockWidth!! / 2f, texture.blockHeight / 2f))
         bodyDef.angle = angle?:0f
         body = physicsEngine.getWorld().createBody(bodyDef)
 
         val boxShape = PolygonShape().apply {
-            setAsBox(sprite.width / 2f, sprite.height / 2f)
+            setAsBox(texture.blockWidth!! / 2f, texture.blockHeight / 2f)
         }
         val fixtureDef = createFixture(shape = boxShape)
 
@@ -68,20 +75,15 @@ abstract class AbstractBlock (
         }
     }
 
+    fun dispose(){
+        //texture.texture.dispose()
+    }
+
     protected open fun getUserData():String? {
         return null
     }
 
     fun render(spriteBatch: SpriteBatch) {
-
-        val r = body.angle
-        sprite.rotation = r * MathUtils.radiansToDegrees
-        sprite.setOrigin(sprite.width / 2f, sprite.height / 2f)
-        sprite.setPosition(
-            body.position.x - sprite.width / 2f,
-            body.position.y - sprite.height / 2f
-        )
-
-        sprite.draw(spriteBatch)
+        texture.draw(spriteBatch, body.position.x, body.position.y, body.angle)
     }
 }

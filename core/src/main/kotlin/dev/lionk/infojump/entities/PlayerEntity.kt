@@ -1,5 +1,6 @@
 package dev.lionk.infojump.entities
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
@@ -10,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 
+
 class PlayerEntity (
     physicsEngine: PhysicsEngine,
     initialPosition: Vector2
@@ -17,7 +19,6 @@ class PlayerEntity (
 
     private val texture = TextureManager.getTexture("game.player.ninja_overlay")
     private val overlaySprite = Sprite(texture)
-
     init {
         createBody(physicsEngine)
 
@@ -47,14 +48,15 @@ class PlayerEntity (
         sprite.setColor(1f, 0f, 0f, 1f)
     }
 
-    override fun render(spriteBatch: SpriteBatch){
-        super.render(spriteBatch)
+    override fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){
         overlaySprite.setPosition(
-            body.position.x - sprite.width / 2f,
-            body.position.y - sprite.height / 2f
+            currentX(),
+            currentY()
         )
+        super.render(spriteBatch, physicsAlpha)
 
         overlaySprite.draw(spriteBatch)
+
     }
 
     var isWalkingLeft = false
@@ -77,6 +79,5 @@ class PlayerEntity (
     }
     override fun dispose(){
         super.dispose()
-        texture.dispose()
     }
 }

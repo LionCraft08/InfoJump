@@ -63,16 +63,25 @@ abstract class Entity (
         body.setTransform(x, y, body.angle)
     }
 
-    open fun render(spriteBatch: SpriteBatch){
+    protected var previousX: Float = initialPosition.x
+    protected var previousY: Float = initialPosition.y
+
+    open fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){
         sprite.setPosition(
-            body.position.x - sprite.width / 2f,
-            body.position.y - sprite.height / 2f
+            currentX(),
+            currentY()
         )
 
         sprite.draw(spriteBatch)
+
+        previousX = currentX()
+        previousY = currentY()
     }
 
+    protected fun currentX(): Float = body.position.x - sprite.width / 2f
+    protected fun currentY(): Float = body.position.y - sprite.height / 2f
+
     open fun dispose(){
-        texture.dispose()
+        //texture.dispose()
     }
 }
