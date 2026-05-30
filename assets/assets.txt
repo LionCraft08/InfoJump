@@ -28,7 +28,7 @@ game/player/ninja_mirrored - Kopie.png
 game/player/ninja_mirrored.png
 game/player/ninja_overlay.png
 game/player/ninja_overlay_mirrored.png
-game/player/ninja_preset2.png
+game/player/ninja_preset.png
 game/player/skelett.png
 game/player/skelett2.png
 game/player/static.png
@@ -44,6 +44,7 @@ ui/font-subtitle.fnt
 ui/font-window.fnt
 ui/font.fnt
 ui/pixelfont.ttf
+ui/pixelfont_alt.ttf
 ui/uiskin.atlas
 ui/uiskin.json
 ui/uiskin.png

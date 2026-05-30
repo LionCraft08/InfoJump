@@ -4,28 +4,31 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
-import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import dev.lionk.infojump.Main
 import dev.lionk.infojump.actions.ActionManager
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.logic.Timer
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.views.GameView
 
 
 private const val SPLASH_SCREEN_TIME = 2500L
 
 class UI (
-    level: Level?=null
+    private val level: Level?=null
 ){
     private val font: BitmapFont
     private var uiBatch: SpriteBatch = SpriteBatch()
@@ -37,6 +40,8 @@ class UI (
     private var splashNotificationSetTime: Long=0
     private val stage: Stage
     private val skin = Skin(Gdx.files.internal("ui/uiskin.json"))
+
+    private val health = Table()
 
     init {
         timer.start()
@@ -64,10 +69,27 @@ class UI (
         addButton("zum Menü", "goToMenu", table)
         level?.menuButtons?.forEach { addButton(it, it, table) }
 
-
+        //Health
+        health.setFillParent(true)
+        health.debug = Settings.isDebugging
+        health.top()
+        health.pad(50f)
+        health.scaleBy(3f)
+        updateHealth()
+        stage.addActor(health)
 
         generator.dispose()
 
+    }
+
+    fun updateHealth(){
+        val currentHealth = level?.player?.getHealth()?:3
+        health.clear()
+        for (i in 0..2) {
+            if (i < currentHealth) {
+                health.add(Image(TextureManager.getTexture("game.objects.herz")).apply { setScale(3f) }).pad(16f)
+            } else health.add(Image(TextureManager.getTexture("game.objects.herz_weg")).apply { setScale(3f) }).pad(16f)
+        }
     }
 
     private fun addButton(text: String, action: String, table: Table){

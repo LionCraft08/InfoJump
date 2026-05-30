@@ -21,6 +21,9 @@ import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.components.UI
 import kotlin.math.abs
 
+
+private const val CAMERA_MOVE_OFFSET = 25
+
 class GameView: AbstractView() {
     val camera = OrthographicCamera()
     val viewport = FitViewport(128f, 72f, camera)
@@ -31,7 +34,7 @@ class GameView: AbstractView() {
     val ui : UI = UI(level)
 
 
-    private var isMovingCam = false
+    private var camMovingDest: Float? = null
 
 
     override fun render() {
@@ -54,10 +57,14 @@ class GameView: AbstractView() {
 
         //Camera
         camera.update()
-        if(!isMovingCam && abs(camera.position.x - level.player.body.position.x) > 40) isMovingCam = true
-        if(isMovingCam) {
-            camera.position.x = MathUtils.lerp(camera.position.x, level.player.body.position.x, 0.05f);
-            if(abs(camera.position.x - level.player.body.position.x) < 1) isMovingCam = false
+        val distToCam = camera.position.x - level.player.body.position.x
+        if(camMovingDest == null && abs(distToCam) > 40 || distToCam > 50) {
+            camMovingDest = level.player.body.position.x - (distToCam / abs(distToCam)) * CAMERA_MOVE_OFFSET * if(distToCam > 50) -1 else 1
+
+        }
+        if(camMovingDest != null) {
+            camera.position.x = MathUtils.lerp(camera.position.x, camMovingDest!!, 0.05f);
+            if(abs(camera.position.x - camMovingDest!!) < 0.5) camMovingDest = null
         }
 
     }
@@ -104,6 +111,7 @@ class GameView: AbstractView() {
     }
 
     override fun onResize(width: Int, height: Int) {
+        camMovingDest = level.player.body.position.x + CAMERA_MOVE_OFFSET
         viewport.update(width, height, true)
         // Update UI camera on resize as well
         ui.onResize(width.toFloat(), height.toFloat())

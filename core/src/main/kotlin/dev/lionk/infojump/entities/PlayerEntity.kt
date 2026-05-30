@@ -8,18 +8,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import dev.lionk.infojump.Main
+import dev.lionk.infojump.actions.ActionManager
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.views.GameView
 
 
 class PlayerEntity (
     physicsEngine: PhysicsEngine,
-    initialPosition: Vector2
+    initialPosition: Vector2,
+    private var health: Int = 3
 ): Entity("game.player.ninja", physicsEngine, initialPosition = initialPosition, description = "player") {
 
     private val texture = TextureManager.getTexture("game.player.ninja_overlay")
     private val overlaySprite = Sprite(texture)
+
     init {
         createBody(physicsEngine)
 
@@ -27,6 +32,19 @@ class PlayerEntity (
 //        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
         overlaySprite.setSize(super.sprite.width, super.sprite.height)
         colorSprite()
+    }
+
+    fun getHealth(): Int{
+        return health
+    }
+
+    fun removeHealth(){
+        health--
+        (Main.INSTANCE.getView() as? GameView)?.ui?.updateHealth()
+        if(health <=0){
+            ActionManager.handleAction("finalDeath")
+        }
+
     }
 
     private fun createBody(physicsEngine: PhysicsEngine) {

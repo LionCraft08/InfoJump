@@ -23,6 +23,20 @@ object ActionManager {
                 )
             )
         }
+        actions["death"] = {
+            val game = Main.INSTANCE.getView() as GameView
+            game.level.physicsEngine.addTPRequest(
+                TeleportRequest(
+                    game.level.player.body,
+                    game.level.lastCheckpoint.x, game.level.lastCheckpoint.y
+                )
+            )
+            game.ui.displaySplashNotification("Du bist gestorben!")
+            game.level.player.removeHealth()
+        }
+        actions["finalDeath"] = {
+            Main.INSTANCE.changeView("menu")
+        }
         actions["checkpointSetzen"] = {
             val game = Main.INSTANCE.getView() as GameView
             if(!game.level.lastCheckpoint.isNear(game.level.player.body.position.toPos())) {
