@@ -1,5 +1,6 @@
 package dev.lionk.infojump.views
 
+import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -14,9 +15,12 @@ import dev.lionk.infojump.blocks.AbstractBlock
 import dev.lionk.infojump.blocks.FloorBody
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.entities.PlayerEntity
+import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.level.LevelLoader
 import dev.lionk.infojump.logic.PhysicsEngine
+import dev.lionk.infojump.multiplayer.MultiplayerGameAddon
+import dev.lionk.infojump.multiplayer.MultiplayerManager
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.components.UI
 import kotlin.math.abs
@@ -24,14 +28,25 @@ import kotlin.math.abs
 
 private const val CAMERA_MOVE_OFFSET = 25
 
-class GameView: AbstractView() {
+class GameView(
+    hasMultiplayerGameAddon: Boolean = false,
+    game: String = "singleplayer_game"
+): AbstractView() {
+
+    init {
+        GameManager.loadGame(game)
+    }
+
     val camera = OrthographicCamera()
     val viewport = FitViewport(128f, 72f, camera)
     private var debugRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
     private var spriteBatch: SpriteBatch = SpriteBatch()
-    var level: Level= LevelLoader.loadLevel("example_level")
-        private set
-    val ui : UI = UI(level)
+    //var level: Level= LevelLoader.loadLevel("example_level")
+    //    private set
+    val ui : UI = UI()
+    val multiplayerGameAddon : MultiplayerGameAddon? = if(hasMultiplayerGameAddon){
+        MultiplayerGameAddon(MultiplayerManager.getPlayers())
+    } else null
 
 
     private var camMovingDest: Float? = null
@@ -48,18 +63,19 @@ class GameView: AbstractView() {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin()
         spriteBatch.draw(TextureManager.getTexture("game.env.background"), 0f, 0f, viewport.worldWidth, viewport.worldHeight)
-        level.render(spriteBatch, physicsAlpha)
+        GameManager.getCurrentLevel().render(spriteBatch, physicsAlpha)
+        multiplayerGameAddon?.render(Gdx.graphics.deltaTime, spriteBatch)
         spriteBatch.end()
 
         if(Settings.isDebugging)
-            debugRenderer.render(level.physicsEngine.getWorld(), viewport.camera.combined)
+            debugRenderer.render(GameManager.getCurrentLevel().physicsEngine.getWorld(), viewport.camera.combined)
         ui.render() //UI
 
         //Camera
         camera.update()
-        val distToCam = camera.position.x - level.player.body.position.x
+        val distToCam = camera.position.x - GameManager.getCurrentLevel().player.body.position.x
         if(camMovingDest == null && abs(distToCam) > 40 || distToCam > 50) {
-            camMovingDest = level.player.body.position.x - (distToCam / abs(distToCam)) * CAMERA_MOVE_OFFSET * if(distToCam > 50) -1 else 1
+            camMovingDest = GameManager.getCurrentLevel().player.body.position.x - (distToCam / abs(distToCam)) * CAMERA_MOVE_OFFSET * if(distToCam > 50) -1 else 1
 
         }
         if(camMovingDest != null) {
@@ -72,7 +88,8 @@ class GameView: AbstractView() {
     override fun dispose() {
         spriteBatch.dispose()
         ui.dispose()
-        level.dispose()
+        GameManager.getCurrentLevel().dispose()
+        multiplayerGameAddon?.dispose()
         debugRenderer.dispose()
     }
 
@@ -80,6 +97,7 @@ class GameView: AbstractView() {
     private var physicsAlpha: Float = 0f
 
     override fun handleInput() {
+        val level = GameManager.getCurrentLevel()
         val velocity = level.player.body.linearVelocity
         val jumpImpulse = level.jumpStrength
         val moveSpeed = level.moveSpeed
@@ -111,7 +129,7 @@ class GameView: AbstractView() {
     }
 
     override fun onResize(width: Int, height: Int) {
-        camMovingDest = level.player.body.position.x + CAMERA_MOVE_OFFSET
+        camMovingDest = GameManager.getCurrentLevel().player.body.position.x + CAMERA_MOVE_OFFSET
         viewport.update(width, height, true)
         // Update UI camera on resize as well
         ui.onResize(width.toFloat(), height.toFloat())

@@ -64,12 +64,23 @@ object TextureManager {
         addTexture("ui.buttons.default_pressed")
         addTexture("ui.buttons.haken")
         addTexture("ui.buttons.kein_haken")
+        addTexture("ui.cursor.cursor")
         FileHandle("assets\\menu").list().forEach {
             if(it.extension().endsWith("png")){
                 addTexture("menu.${it.nameWithoutExtension()}")
             }
         }
+        FileHandle("assets\\menu_multiplayer").list().forEach {
+            if(it.extension().endsWith("png")){
+                addTexture("menu_multiplayer.${it.nameWithoutExtension()}")
+            }
+        }
     }
+
+    fun loadLocalGameFiles(){
+
+    }
+
     private fun loadAssetsRecursively(file: FileHandle, vararg filetypes: String): List<FileHandle>{
         val list = mutableListOf<FileHandle>()
         if(!file.exists()) return list

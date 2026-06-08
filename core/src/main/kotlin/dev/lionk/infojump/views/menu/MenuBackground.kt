@@ -12,12 +12,13 @@ private const val IMAGE_DURATION = 10 // Wie lange ein Bild angezeigt wird in se
  * Der Hintergrund für das Haupt-Menu, bestehend aus allen Bildern die im Ordner menu mit dem namen "background" sind
  */
 class MenuBackground(
-    stage: Stage
+    stage: Stage,
+    texturePath:String="menu.background",
 ) {
     val images: MutableList<Actor> = mutableListOf()
 
     init {
-        val textures = TextureManager.getTextureSet("menu.background")
+        val textures = TextureManager.getTextureSet(texturePath)
         println("Loaded ${textures.size} menu background images")
         textures.forEach {
             val actor = Image(it)
@@ -35,7 +36,11 @@ class MenuBackground(
     fun render(delta:Float) {
 
         //Fade-Transition berechnen
-        if(images.size <=1) return
+        if(images.isEmpty()) return
+        if(images.size == 1) {
+            images.first().setColor(1f, 1f, 1f, 1f)
+            return
+        }
         renderStage += delta
         if(renderStage >= images.size*IMAGE_DURATION) renderStage = 0f
         val currentImage = (renderStage / IMAGE_DURATION).toInt()

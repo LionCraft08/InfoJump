@@ -1,6 +1,7 @@
 package dev.lionk.infojump.actions
 
 import dev.lionk.infojump.Main
+import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.level.Pos
 import dev.lionk.infojump.level.toPos
 import dev.lionk.infojump.logic.TeleportRequest
@@ -15,43 +16,60 @@ object ActionManager {
             Main.INSTANCE.changeView("menu")
         }
         actions["zumLetztenCheckpoint"] = {
-            val game = Main.INSTANCE.getView() as GameView
-            game.level.physicsEngine.addTPRequest(
+            val level = GameManager.getCurrentLevel()
+            GameManager.getCurrentLevel().physicsEngine.addTPRequest(
                 TeleportRequest(
-                    game.level.player.body,
-                    game.level.lastCheckpoint.x, game.level.lastCheckpoint.y
+                    GameManager.getCurrentLevel().player.body,
+                    level.lastCheckpoint.x, level.lastCheckpoint.y
                 )
             )
         }
         actions["death"] = {
-            val game = Main.INSTANCE.getView() as GameView
-            game.level.physicsEngine.addTPRequest(
-                TeleportRequest(
-                    game.level.player.body,
-                    game.level.lastCheckpoint.x, game.level.lastCheckpoint.y
+            val level = GameManager.getCurrentLevel()
+            if(!level.player.removeHealth()) {
+                level.physicsEngine.addTPRequest(
+                    TeleportRequest(
+                        level.player.body,
+                        level.lastCheckpoint.x, level.lastCheckpoint.y
+                    )
                 )
-            )
-            game.ui.displaySplashNotification("Du bist gestorben!")
-            game.level.player.removeHealth()
+            }
+            (Main.INSTANCE.getView() as GameView).ui.displaySplashNotification("Du bist gestorben!")
+
         }
         actions["finalDeath"] = {
-            Main.INSTANCE.changeView("menu")
+            val level = GameManager.getCurrentLevel()
+
+            GameManager.getCurrentLevel().physicsEngine.addTPRequest(
+                TeleportRequest(
+                    GameManager.getCurrentLevel().player.body,
+                    level.spawnPos.x, level.spawnPos.y
+                )
+            )
+
+            level.lastCheckpoint = level.spawnPos
+
+            level.player.resetHealth()
+
+            (Main.INSTANCE.getView() as GameView).ui.updateHealth()
         }
         actions["checkpointSetzen"] = {
+            val level = GameManager.getCurrentLevel()
             val game = Main.INSTANCE.getView() as GameView
-            if(!game.level.lastCheckpoint.isNear(game.level.player.body.position.toPos())) {
-                game.level.lastCheckpoint = game.level.player.body.position.toPos()
+            if(!level.lastCheckpoint.isNear(level.player.body.position.toPos())) {
+                level.lastCheckpoint = level.player.body.position.toPos()
                 game.ui.displaySplashNotification("Checkpoint erreicht!")
             }
         }
         actions["teleport"] = {
+            val level = GameManager.getCurrentLevel()
             val game = Main.INSTANCE.getView() as GameView
             try {
                 val parts = it!!.split(":")
                 val pos = Pos(parts[0].toFloat(), parts[1].toFloat())
-                game.level.physicsEngine.addTPRequest(
+                level.physicsEngine.addTPRequest(
                     TeleportRequest(
-                        game.level.player.body,
+                        level.player.body,
                         pos.x, pos.y
                     )
                 )
@@ -62,7 +80,7 @@ object ActionManager {
         }
         actions["ziel"] = {
             val game = Main.INSTANCE.getView() as GameView
-            game.ui.timer.stop()
+            GameManager.game?.nextLevel()?:game.ui.timer.stop()
         }
     }
 

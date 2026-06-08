@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import dev.lionk.infojump.Main
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.menu.MenuBackground
@@ -24,7 +24,6 @@ class MenuView(
 ): AbstractView(
 
 ) {
-    var skin: Skin? = null
     var stage: Stage? = null
     val font: BitmapFont
 
@@ -40,7 +39,6 @@ class MenuView(
 
         Gdx.input.setInputProcessor(stage)
 
-        skin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
         buttonBackground = NinePatchDrawable(NinePatch(
             TextureManager.getTexture("ui.buttons.default"), 8, 8, 8, 8))
@@ -76,6 +74,7 @@ class MenuView(
         textStyle.up = buttonBackground
         textStyle.over = buttonBackgroundHover
         val playButton = TextButton("Singleplayer", textStyle)
+        val multiplayerButton = TextButton("Multiplayer",textStyle)
         val settingsButton = TextButton("Einstellungen",textStyle)
 
 
@@ -89,10 +88,17 @@ class MenuView(
                 settingsUI.toggle()
             }
         })
+        multiplayerButton.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                Main.INSTANCE.changeView("multiplayer")
+            }
+        })
 
         //settingsButton.setX(100f, 1)
-        // Add the button to the table
+        // Add the button to the loginTable
         table.add(playButton).fillX().uniformX().pad(10f)//.actor.background(buttonBackground)
+        table.row()
+        table.add(multiplayerButton).fillX().uniformX().pad(10f)
         table.row()
         table.add(settingsButton).fillX().uniformX().pad(10f)
     }
@@ -113,7 +119,6 @@ class MenuView(
 
     override fun dispose() {
         stage!!.dispose()
-        skin!!.dispose()
     }
 
     override fun handleInput() {

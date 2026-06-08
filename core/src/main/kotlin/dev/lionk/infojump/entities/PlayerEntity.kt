@@ -14,20 +14,22 @@ import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.GameView
+import kotlinx.coroutines.GlobalScope
 
 
-class PlayerEntity (
+open class PlayerEntity (
     physicsEngine: PhysicsEngine,
     initialPosition: Vector2,
-    private var health: Int = 3
+    private val healthAtStart: Int = 3,
+    private val color: Color = Settings.playerColor
 ): Entity("game.player.ninja", physicsEngine, initialPosition = initialPosition, description = "player") {
 
     private val texture = TextureManager.getTexture("game.player.ninja_overlay")
     private val overlaySprite = Sprite(texture)
 
-    init {
-        createBody(physicsEngine)
+    private var health: Int = healthAtStart
 
+    init {
 //        val textureFactor = 10f / texture.height
 //        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
         overlaySprite.setSize(super.sprite.width, super.sprite.height)
@@ -38,33 +40,31 @@ class PlayerEntity (
         return health
     }
 
-    fun removeHealth(){
+    fun removeHealth(): Boolean{
         health--
         (Main.INSTANCE.getView() as? GameView)?.ui?.updateHealth()
         if(health <=0){
             ActionManager.handleAction("finalDeath")
+            return true
         }
-
+        return false
+    }
+    fun resetHealth(){
+        health = healthAtStart
     }
 
-    private fun createBody(physicsEngine: PhysicsEngine) {
-        // Foot sensor
-        val footShape = PolygonShape().apply {
-            setAsBox(super.sprite.width / 2.05f, 0.1f, Vector2(0f, -sprite.height / 2f), 0f)
-        }
-        val footFixtureDef = FixtureDef().apply {
-            shape = footShape
-            isSensor = true
-        }
-        body.createFixture(footFixtureDef).apply {
-            userData = "feet"
-        }
-
-        footShape.dispose()
-    }
 
     fun colorSprite(){
-        sprite.setColor(Settings.playerColor)
+        sprite.setColor(color)
+    }
+
+    fun updateVelocity(
+        vx: Float,
+        vy: Float
+    ){
+        body.setLinearVelocity(
+            vx, vy
+        )
     }
 
     override fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){

@@ -1,6 +1,14 @@
+
+plugins{
+  id("org.jetbrains.kotlin.plugin.serialization") version "2.4.0"
+}
+
 eclipse.project.name = appName + '-shared'
+
 
 dependencies {
   implementation "com.github.MrStahlfelge.gdx-websockets:core:$websocketVersion"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  implementation 'com.google.code.gson:gson:2.14.0'
+  implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0"
 }

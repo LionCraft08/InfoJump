@@ -2,10 +2,15 @@ package dev.lionk.infojump
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.physics.box2d.Box2D
+import dev.lionk.infojump.game.GameManager
+import dev.lionk.infojump.multiplayer.MultiplayerGameAddon
+import dev.lionk.infojump.multiplayer.MultiplayerManager
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.tick.TickQueue
 import dev.lionk.infojump.views.AbstractView
 import dev.lionk.infojump.views.GameView
 import dev.lionk.infojump.views.MenuView
+import dev.lionk.infojump.views.MultiplayerView
 
 class Main : Game() {
     private lateinit var currentView: AbstractView
@@ -30,9 +35,14 @@ class Main : Game() {
 
     fun changeView(view: String){
 
+        val args = view.substringAfter(":", "")
+        val view = view.substringBefore(":")
+
         val tmp = currentView;
         currentView = when(view.trim()){
             "game" ->  GameView()
+            "multiplayer" -> MultiplayerView()
+            "multiplayer_game" -> GameView(true, args)
             "menu" ->  MenuView(){
                 println("Initializing Game")
                 changeView("game")
@@ -45,6 +55,7 @@ class Main : Game() {
     }
 
     override fun render() {
+        TickQueue.executeFunctions()
         currentView.handleInput()
         currentView.render()
     }

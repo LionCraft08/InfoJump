@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import dev.lionk.infojump.Main
 import dev.lionk.infojump.actions.ActionManager
 import dev.lionk.infojump.data.Settings
+import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.logic.Timer
 import dev.lionk.infojump.rendering.TextureManager
@@ -28,7 +29,7 @@ import dev.lionk.infojump.views.GameView
 private const val SPLASH_SCREEN_TIME = 2500L
 
 class UI (
-    private val level: Level?=null
+    private val level: Level? = GameManager.getCurrentLevel()
 ){
     private val font: BitmapFont
     private var uiBatch: SpriteBatch = SpriteBatch()

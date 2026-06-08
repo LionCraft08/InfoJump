@@ -12,7 +12,11 @@ object LevelLoader {
         level: String
     ): Level {
         val file = TextureManager.loadAsset("game.levels.$level", "json")
-        val levelPreset = deserializeLevel(file.readString())
+        return loadLevelFromDeserializedString(file.readString())
+    }
+
+    fun loadLevelFromDeserializedString(levelJson: String):Level{
+        val levelPreset = deserializeLevel(levelJson)
         val level = Level(
             spawnPos = levelPreset.spawnPoint,
             levelPreset = levelPreset
@@ -21,6 +25,7 @@ object LevelLoader {
 
         return level
     }
+
     private fun addObjects(levelPreset: LevelPreset, level: Level, initPos: Pos) {
         levelPreset.blocks.forEach { block ->
             level.addBlock(StaticBlock(
@@ -53,6 +58,5 @@ object LevelLoader {
     }
     fun deserializeLevel(level: String): LevelPreset {
         return Gson().fromJson(level, LevelPreset::class.java)
-
     }
 }

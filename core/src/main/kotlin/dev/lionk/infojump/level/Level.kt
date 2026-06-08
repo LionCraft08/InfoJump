@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import dev.lionk.infojump.blocks.AbstractBlock
 import dev.lionk.infojump.blocks.FloorBody
+import dev.lionk.infojump.entities.ControlledPlayerEntity
 import dev.lionk.infojump.entities.Entity
 import dev.lionk.infojump.entities.PlayerEntity
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.logic.Timer
 
 class Level (
-    private val spawnPos: Pos,
+    val spawnPos: Pos,
     private val blocks: MutableList<AbstractBlock> = mutableListOf(),
     private val entities: MutableList<Entity> = mutableListOf(),
     levelPreset: LevelPreset?=null
@@ -28,7 +29,7 @@ class Level (
     val menuButtons:List<String>?=levelPreset?.buttons
 
     init {
-        player = PlayerEntity(physicsEngine = physicsEngine, initialPosition = spawnPos.toVector())
+        player = ControlledPlayerEntity(physicsEngine = physicsEngine, initialPosition = spawnPos.toVector())
     }
 
     val floor = FloorBody(physicsEngine)
