@@ -6,7 +6,7 @@ import dev.lionk.infojump.level.Level
 abstract class AbstractGame (
     protected val levels: List<String>
 ) {
-    protected abstract fun loadLevel(key: String): Level
+    abstract fun loadLevel(key: String): Level
     var currentLevel: Level
         private set
     protected var currentLevelIndex = 0

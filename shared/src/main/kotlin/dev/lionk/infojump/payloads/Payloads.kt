@@ -11,7 +11,6 @@ data class LoginPayload(val username: String) : Payload
 @Serializable
 data class PlayerUpdatePayload(
     val x: Float, val y: Float,
-    val vx: Float, val vy: Float,
     val player: String) : Payload
 
 @Serializable
@@ -26,6 +25,11 @@ data class StartGamePayload(
 ): Payload
 
 @Serializable
+data class EndGamePayload(
+    val successful:Boolean,
+)
+
+@Serializable
 data class HandshakePayload(
     val success: Boolean,
     val players: List<Player>,
@@ -33,6 +37,7 @@ data class HandshakePayload(
 @Serializable
 data class Player(
     val name: String,
+    val character: String,
     val color: Long,
     var ready: Boolean,
 ) : Payload

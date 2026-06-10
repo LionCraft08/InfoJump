@@ -28,7 +28,7 @@ class GameClient {
 
                 var serverMessage: String?
                 while ((`in`!!.readLine().also { serverMessage = it }) != null) {
-                    LionLog.client("Server: $serverMessage")
+                    //LionLog.client("Server: $serverMessage")
                     MultiplayerManager.handleIncomingMessage(serverMessage)
                 }
             } catch (e: Exception) {

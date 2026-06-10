@@ -24,6 +24,7 @@ import dev.lionk.infojump.payloads.HandshakePayload
 import dev.lionk.infojump.payloads.Player
 import dev.lionk.infojump.payloads.PlayerListUpdatePayload
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.tick.TickQueue
 import dev.lionk.infojump.views.components.InputField
 import dev.lionk.infojump.views.menu.MenuBackground
 
@@ -92,8 +93,14 @@ class MultiplayerView: AbstractView() {
 
         confirmButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                connectionStage = ConnectionStage.TCPConnecting
-                MultiplayerManager.connect(ipInput.getText(), portInput.getText(), usernameInput.getText())
+                TickQueue.addFunction {
+                    if(!ipInput.getText().isNullOrBlank()
+                        && !portInput.getText().isNullOrBlank()
+                        && !usernameInput.getText().isNullOrBlank()) {
+                        connectionStage = ConnectionStage.TCPConnecting
+                        MultiplayerManager.connect(ipInput.getText(), portInput.getText(), usernameInput.getText())
+                    }
+                }
             }
         })
 
@@ -166,23 +173,28 @@ class MultiplayerView: AbstractView() {
 
         if(!(players.find { it.name == MultiplayerManager.name }?.ready?:false)){
             playerListTable.row()
+            val buttonStyle = TextButton.TextButtonStyle(buttonBackground, null, null, font)
+            buttonStyle.overFontColor = Color.SKY
             playerListTable.add(
                 TextButton(
                     "Bereit",
-                    textStyle
+                    buttonStyle
                 ).apply {
                     addListener(object : ChangeListener() {
                         override fun changed(event: ChangeEvent?, actor: Actor?) {
                             MultiplayerManager.sendReadyCheck()
                         }
                     })
+
+                    //background(buttonBackground)
+                    //background = buttonBackground
                 }
             )
             playerListTable.row()
         }
 
         val container = Container<Table>(playerListTable)
-        container.left()
+        container.center()
         container.setFillParent(true)
 
         stage.addActor(container)

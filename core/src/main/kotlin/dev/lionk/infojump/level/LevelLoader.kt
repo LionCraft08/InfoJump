@@ -3,30 +3,34 @@ package dev.lionk.infojump.level
 import com.google.gson.Gson
 import dev.lionk.infojump.blocks.PassthroughBlock
 import dev.lionk.infojump.blocks.StaticBlock
+import dev.lionk.infojump.game.AbstractGame
+import dev.lionk.infojump.game.Game
+import dev.lionk.infojump.multiplayer.MultiplayerManager
 import dev.lionk.infojump.rendering.TextureManager
 
 object LevelLoader {
     private val gson = Gson()
 
     fun loadLevel(
-        level: String
+        level: String,
+        multiplayer: Boolean = false,
     ): Level {
         val file = TextureManager.loadAsset("game.levels.$level", "json")
-        return loadLevelFromDeserializedString(file.readString())
+        return loadLevelFromDeserializedString(file.readString(), multiplayer)
     }
 
-    fun loadLevelFromDeserializedString(levelJson: String):Level{
+    fun loadLevelFromDeserializedString(levelJson: String,multiplayer: Boolean = false,):Level{
         val levelPreset = deserializeLevel(levelJson)
         val level = Level(
             spawnPos = levelPreset.spawnPoint,
             levelPreset = levelPreset
         )
-        addObjects(levelPreset, level, Pos(0f, 0f))
+        addObjects(levelPreset, level, Pos(0f, 0f),multiplayer)
 
         return level
     }
 
-    private fun addObjects(levelPreset: LevelPreset, level: Level, initPos: Pos) {
+    private fun addObjects(levelPreset: LevelPreset, level: Level, initPos: Pos,multiplayer: Boolean = false,) {
         levelPreset.blocks.forEach { block ->
             level.addBlock(StaticBlock(
                 level.physicsEngine,
@@ -51,8 +55,9 @@ object LevelLoader {
             ))
         }
         levelPreset.sublevels?.forEach { sublist ->
-            val sublevel = TextureManager.loadAsset(sublist.path, "json")
-            val subpreset = deserializeLevel(sublevel.readString())
+            val sublevel = if(multiplayer) MultiplayerManager.getAsset(sublist.path)
+                else TextureManager.loadAsset(sublist.path, "json").readString()
+            val subpreset = deserializeLevel(sublevel)
             addObjects(subpreset, level, sublist.pos)
         }
     }

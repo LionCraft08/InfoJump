@@ -18,6 +18,7 @@ object LionDeserialization {
         registerType<ServerAssetsSendPayload>()
         registerType<ReadyPayload>()
         registerType<StartGamePayload>()
+        registerType<EndGamePayload>()
     }
 
     val jsonFormat: Json = Json {

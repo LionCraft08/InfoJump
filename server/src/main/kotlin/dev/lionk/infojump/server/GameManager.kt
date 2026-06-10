@@ -1,6 +1,7 @@
 package dev.lionk.infojump.server
 
 import dev.lionk.infojump.LionLog
+import dev.lionk.infojump.payloads.EndGamePayload
 import dev.lionk.infojump.payloads.HandshakePayload
 import dev.lionk.infojump.payloads.LionDeserialization
 import dev.lionk.infojump.payloads.Player
@@ -16,6 +17,11 @@ object GameManager {
         players[address] = Player(
             name = name,
             color = availableColors[nextColor++ % availableColors.size],
+            character = if(availableCharacters.isNotEmpty()) {
+                val tmp = availableCharacters.first()
+                availableCharacters.removeFirst()
+                tmp
+            }else "ninja",
             ready = false
         )
         server.send(LionDeserialization.serialize(HandshakePayload(
@@ -71,6 +77,14 @@ object GameManager {
         )
         LionLog.server("Player $name disconnected")
     }
+
+    fun stopGame() {
+        server.send(LionDeserialization.serialize(
+            EndGamePayload(false)
+        ), listOf())
+    }
+
     private val availableColors = CommonData.getAvailableColors().values.toList()
+    private val availableCharacters = mutableListOf("ninja", "skelett", "raeuber")
     private var nextColor = 0
 }

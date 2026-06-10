@@ -15,7 +15,7 @@ object TextureManager {
     fun loadAsset(name:String, vararg filetypes: String): FileHandle{
         val path = "assets\\"+name.replace(".", "\\")
         var file = File(path)
-        if(!file.exists()){
+        if(!file.exists() || (file.isDirectory && filetypes.isNotEmpty())){
             for(filetype in filetypes){
                 file = File("$path.$filetype")
                 if(file.exists()){
@@ -23,7 +23,7 @@ object TextureManager {
                 }
             }
         }
-        if(!file.exists()){
+        if(!file.exists() || file.isDirectory){
             System.err.println(file.absolutePath)
             throw IllegalArgumentException("Datei $name existiert nicht")
         }

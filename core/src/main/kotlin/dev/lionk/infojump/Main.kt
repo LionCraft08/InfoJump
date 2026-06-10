@@ -6,6 +6,7 @@ import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.multiplayer.MultiplayerGameAddon
 import dev.lionk.infojump.multiplayer.MultiplayerManager
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.tick.TickManager
 import dev.lionk.infojump.tick.TickQueue
 import dev.lionk.infojump.views.AbstractView
 import dev.lionk.infojump.views.GameView
@@ -52,6 +53,12 @@ class Main : Game() {
         currentView.onResize(width, height)
 
         tmp.dispose()
+    }
+
+    override fun dispose() {
+        super.dispose()
+        currentView.dispose()
+        TickManager.stop()
     }
 
     override fun render() {

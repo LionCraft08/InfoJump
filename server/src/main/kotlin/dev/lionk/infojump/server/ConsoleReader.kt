@@ -10,6 +10,7 @@ object ConsoleReader {
             val line = scanner.nextLine()
             when(line.lowercase().trim()){
                 "exit"->{
+                    GameManager.stopGame()
                     server.stop()
                     isRunning = false
                 }

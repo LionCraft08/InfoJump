@@ -1,10 +1,12 @@
 package dev.lionk.infojump.game
 
 import com.google.gson.Gson
+import dev.lionk.infojump.Main
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.level.LevelPreset
 import dev.lionk.infojump.multiplayer.MultiplayerManager
 import dev.lionk.infojump.rendering.TextureManager
+import dev.lionk.infojump.tick.TickManager
 
 object GameManager {
     var game: AbstractGame? = null
@@ -24,6 +26,11 @@ object GameManager {
             )
         }
 
+    }
+
+    fun endGame(){
+        TickManager.stop()
+        Main.INSTANCE.changeView("menu")
     }
 
     fun getCurrentLevel(): Level {

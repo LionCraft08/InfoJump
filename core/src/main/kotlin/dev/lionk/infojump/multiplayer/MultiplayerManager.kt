@@ -1,7 +1,11 @@
 package dev.lionk.infojump.multiplayer
 
+import com.badlogic.gdx.graphics.Color
 import dev.lionk.infojump.LionLog
 import dev.lionk.infojump.Main
+import dev.lionk.infojump.data.Settings
+import dev.lionk.infojump.game.GameManager
+import dev.lionk.infojump.payloads.EndGamePayload
 import dev.lionk.infojump.payloads.HandshakePayload
 import dev.lionk.infojump.payloads.LionDeserialization
 import dev.lionk.infojump.payloads.LoginPayload
@@ -11,7 +15,9 @@ import dev.lionk.infojump.payloads.PlayerUpdatePayload
 import dev.lionk.infojump.payloads.ReadyPayload
 import dev.lionk.infojump.payloads.ServerAssetsSendPayload
 import dev.lionk.infojump.payloads.StartGamePayload
+import dev.lionk.infojump.tick.TickManager
 import dev.lionk.infojump.tick.TickQueue
+import dev.lionk.infojump.views.GameView
 import dev.lionk.infojump.views.MultiplayerView
 
 object MultiplayerManager {
@@ -53,8 +59,14 @@ object MultiplayerManager {
     }
 
     fun handleIncomingMessage(message:String?){
-        if(message == null) return
-        val payload = LionDeserialization.deserialize(message)
+        if(message.isNullOrBlank()) return
+        val payload = try {
+             LionDeserialization.deserialize(message)
+        }catch (e:Exception){
+            LionLog.debug("Lion connect error: $message")
+            e.printStackTrace()
+            return
+        }
         when (payload){
             is HandshakePayload -> {
                 val view = Main.INSTANCE.getView() as? MultiplayerView
@@ -65,6 +77,9 @@ object MultiplayerManager {
                 view?.handlePlayerListUpdate(payload)
                 players.clear()
                 players.addAll(payload.list)
+                val color = players.find { it.name == name }?.color
+                if(color != null)
+                    Settings.playerColor = Color(color.toInt())
             }
             is ServerAssetsSendPayload -> {
                 serverAssets.clear()
@@ -72,7 +87,16 @@ object MultiplayerManager {
             }
             is StartGamePayload -> {
                 TickQueue.addFunction {
-                    Main.INSTANCE.changeView("multiplayer_game:${payload.gameAssetKey}")
+                    startGame(payload.gameAssetKey)
+                }
+            }
+            is PlayerUpdatePayload -> {
+                val view = Main.INSTANCE.getView() as? GameView
+                view?.multiplayerGameAddon?.updatePlayerPos(payload.player, payload.x, payload.y)
+            }
+            is EndGamePayload -> {
+                TickQueue.addFunction {
+                    GameManager.endGame()
                 }
             }
         }
@@ -81,6 +105,29 @@ object MultiplayerManager {
     fun getAsset(key: String): String {
         //LionLog.debug("requesting asset $key: ${serverAssets[key]}")
         return serverAssets[key]?:""
+    }
+
+    fun sendPositionUpdate(
+        posX:Float,posY:Float,
+    ){
+        tcpConnection.sendData(
+            LionDeserialization.serialize(
+                PlayerUpdatePayload(
+                    posX,posY,
+                    name!!
+                )
+            )
+        )
+    }
+
+    fun startGame(game:String){
+        Main.INSTANCE.changeView("multiplayer_game:${game}")
+        TickManager.start()
+
+    }
+
+    fun stopGame(){
+        TickManager.stop()
     }
 
 

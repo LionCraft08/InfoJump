@@ -1,14 +1,15 @@
 package dev.lionk.infojump.logic
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.utils.Timer
-import kotlin.math.min
 
 
 private const val TIME_STEP: Float = 1 / 60f
+
+const val CATEGORY_ENVIRONMENT: Short = 0x0001 // 1
+const val CATEGORY_PLAYER: Short = 0x0002 // 2
 
 class PhysicsEngine(
     gravity:Float=-240f,

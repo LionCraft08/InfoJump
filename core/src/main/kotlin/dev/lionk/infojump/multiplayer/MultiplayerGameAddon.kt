@@ -2,34 +2,43 @@ package dev.lionk.infojump.multiplayer
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import dev.lionk.infojump.entities.PlayerEntity
+import dev.lionk.infojump.entities.MultiPlayerEntity
 import dev.lionk.infojump.game.GameManager
-import dev.lionk.infojump.logic.PhysicsEngine
+import dev.lionk.infojump.level.Pos
 import dev.lionk.infojump.payloads.Player
 
 class MultiplayerGameAddon(
     playerConfigs:List<Player>
 ) {
-    val players: MutableList<PlayerEntity> = mutableListOf()
+    val players: MutableMap<String,MultiPlayerEntity> = mutableMapOf()
     init {
         val level = GameManager.game!!.currentLevel
-        playerConfigs.forEach {
-            players.add(PlayerEntity(
-                level.physicsEngine,
-                level.spawnPos.toVector(),
-                color = Color(it.color.toInt())
-            ))
+        playerConfigs.forEach { config ->
+            if(config.name != MultiplayerManager.name)
+                players[config.name] = MultiPlayerEntity(
+                    "game.player.ninja",
+                    level.spawnPos.toVector(),
+                    name = config.name,
+                    color = Color(config.color.toInt())
+                )
         }
     }
 
     fun render(delta:Float, spriteBatch: SpriteBatch){
         players.forEach {
-            it.render(spriteBatch, delta)
+            it.value.render(spriteBatch, delta)
         }
     }
+
+    fun updatePlayerPos(player: String, x: Float, y: Float) {
+        players[player]?.updatePos(
+            Pos(x,y),
+        )
+    }
+
     fun dispose(){
         players.forEach {
-            it.dispose()
+            it.value.dispose()
         }
     }
 }
