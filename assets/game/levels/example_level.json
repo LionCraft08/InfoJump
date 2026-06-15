@@ -5,6 +5,10 @@
     "x": 10.0,
     "y": 20.0
   },
+  "buttons": [
+    "teleport:100:100",
+    "checkpointSetzen"
+  ],
   "gravity": -240.0,
   "player": {
     "texture": "game.player.ninja",
@@ -18,8 +22,18 @@
         "x": 100.0,
         "y": 5.0
       },
-      "onTouch": "goToMenu",
+      "onTouch": "death",
       "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.fluids.lava_block",
+      "pos": {
+        "x": 120.0,
+        "y": 10.0
+      },
+      "onTouch": "ziel",
+      "width": 20,
       "height": 5
     }
   ],
@@ -46,11 +60,12 @@
     {
       "texture": "game.objects.blocks.holzblock",
       "pos": {
-        "x": 70.0,
-        "y": 15.0
+        "x": 60.0,
+        "y": 10.0
       },
       "width": 10,
-      "height": 5
+      "height": 20,
+      "rotation": 45
     },
     {
       "texture": "game.objects.blocks.holzblock",
@@ -62,7 +77,7 @@
       "height": 5
     },
     {
-      "texture": "game.objects.blocks.holzblock_lang",
+      "texture": "game.objects.blocks.holzblock",
       "pos": {
         "x": 260.0,
         "y": 25.0
@@ -71,7 +86,7 @@
       "height": 10
     },
     {
-      "texture": "game.objects.blocks.holzblock_lang",
+      "texture": "game.objects.blocks.holzblock",
       "pos": {
         "x": 260.0,
         "y": 47.0
@@ -80,7 +95,7 @@
       "height": 10
     },
     {
-      "texture": "game.objects.blocks.holzblock_lang",
+      "texture": "game.objects.blocks.holzblock",
       "pos": {
         "x": 320.0,
         "y": 32.0
@@ -98,7 +113,7 @@
       "height": 5
     },
     {
-      "texture": "game.objects.blocks.holzblock_lang",
+      "texture": "game.objects.blocks.holzblock",
       "pos": {
         "x": 320.0,
         "y": 0.0

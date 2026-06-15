@@ -1,0 +1,69 @@
+{
+  "name": "Nether Sublevel 2",
+  "id": 2,
+  "spawnPoint": {
+    "x": 10.0,
+    "y": 20.0
+  },
+  "gravity": -240.0,
+  "player": {
+    "texture": "game.player.ninja",
+    "jumpStrength": 8000.0,
+    "moveSpeed": 37.0
+  },
+  "nonSolidBlocks": [
+  ],
+  "blocks": [
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 0.0,
+        "y": -30.0
+      },
+      "width": 10,
+      "height": 50,
+      "movement": {
+        "speed": 20.0,
+        "targetPos": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "waitDuration": 2.0
+      }
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 30.0,
+        "y": -30.0
+      },
+      "width": 10,
+      "height": 50,
+      "movement": {
+        "speed": 20.0,
+        "targetPos": {
+          "x": 30.0,
+          "y": 0.0
+        },
+        "waitDuration": 0.5
+      }
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 60.0,
+        "y": -30.0
+      },
+      "width": 10,
+      "height": 50,
+      "movement": {
+        "speed": 20.0,
+        "targetPos": {
+          "x": 60.0,
+          "y": 0.0
+        },
+        "waitDuration": 1.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "name": "Nether Sublevel 1",
+  "id": 2,
+  "spawnPoint": {
+    "x": 10.0,
+    "y": 20.0
+  },
+  "gravity": -240.0,
+  "player": {
+    "texture": "game.player.ninja",
+    "jumpStrength": 8000.0,
+    "moveSpeed": 37.0
+  },
+  "nonSolidBlocks": [
+    {
+      "texture": "game.objects.blocks.twisted_vine",
+      "pos": {
+        "x": 43.0,
+        "y": 15.0
+      },
+      "width": 8,
+      "height": 20,
+      "climbable": true
+    },
+    {
+      "texture": "game.objects.blocks.twisted_vine",
+      "pos": {
+        "x": 0.0,
+        "y": 35.0
+      },
+      "width": 8,
+      "height": 30,
+      "climbable": true
+    }
+  ],
+  "blocks": [
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 3.0,
+        "y": 0.0
+      },
+      "width": 47,
+      "height": 15
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 0.0,
+        "y": 30.0
+      },
+      "width": 40,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 10.0,
+        "y": 50.0
+      },
+      "width": 40,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 50.0,
+        "y": 0.0
+      },
+      "width": 15,
+      "height": 55
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": -10.0,
+        "y": 30.0
+      },
+      "width": 10,
+      "height": 70
+    }
+  ]
+}

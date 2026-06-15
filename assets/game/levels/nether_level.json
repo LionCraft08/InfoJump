@@ -1,0 +1,296 @@
+{
+  "name": "Beispiel-Level",
+  "id": 1,
+  "spawnPoint": {
+    "x": 10.0,
+    "y": 30.0
+  },
+  "buttons": [
+    "teleport:470:200",
+    "checkpointSetzen"
+  ],
+  "color": "#770011ff",
+  "gravity": -240.0,
+  "player": {
+    "texture": "game.player.ninja",
+    "jumpStrength": 8000.0,
+    "moveSpeed": 37.0
+  },
+  "nonSolidBlocks": [
+    {
+      "texture": "game.objects.fluids.magma_block",
+      "pos": {
+        "x": -30.0,
+        "y": 0.0
+      },
+      "onTouch": "death",
+      "width": 700,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.fluids.lava_block",
+      "pos": {
+        "x": -20.0,
+        "y": 0.0
+      },
+      "onTouch": "death",
+      "width": 5,
+      "height": 70
+    },
+    {
+      "texture": "game.objects.checkpoint_flagge",
+      "pos": {
+        "x": 361.0,
+        "y": 60.0
+      },
+      "onTouch": "checkpointSetzen",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "texture": "game.objects.fluids.magma_block",
+      "pos": {
+        "x": 447.0,
+        "y": 25.0
+      },
+      "onTouch": "death",
+      "width": 8,
+      "height": 70
+    },
+    {
+      "texture": "game.objects.checkpoint_flagge",
+      "pos": {
+        "x": 130.0,
+        "y": 15.0
+      },
+      "onTouch": "checkpointSetzen",
+      "width": 8,
+      "height": 8
+    },
+    {
+      "texture": "game.objects.blocks.twisted_vine",
+      "pos": {
+        "x": 500.0,
+        "y": 0.0
+      },
+      "climbable": true,
+      "width": 8,
+      "height": 60
+    },
+    {
+      "texture": "game.objects.blocks.twisted_vine",
+      "pos": {
+        "x": 540.0,
+        "y": 0.0
+      },
+      "climbable": true,
+      "width": 8,
+      "height": 65
+    },
+    {
+      "texture": "game.objects.blocks.twisted_vine",
+      "pos": {
+        "x": 580.0,
+        "y": 0.0
+      },
+      "climbable": true,
+      "width": 8,
+      "height": 55
+    }
+  ],
+  "sublevels": [
+    {
+      "path": "game.levels.sublevels.nether_s1",
+      "pos": {
+        "x": 180.0,
+        "y": 0.0
+      }
+    },
+    {
+      "path": "game.levels.sublevels.nether_s2",
+      "pos": {
+        "x": 280.0,
+        "y": 0.0
+      }
+    },
+    {
+      "path": "game.levels.sublevels.ziel",
+      "pos": {
+        "x": 720.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": -5.0,
+        "y": 10.0
+      },
+      "width": 50,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.ghast",
+      "pos": {
+        "x": 50.0,
+        "y": 10.0
+      },
+      "width": 8,
+      "height": 8,
+      "movement": {
+        "speed": 10.0,
+        "targetPos": {
+          "x": 100.0,
+          "y": 10.0
+        },
+        "waitDuration": 2.0
+      }
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 120.0,
+        "y": 10.0
+      },
+      "width": 20,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 160.0,
+        "y": 5.0
+      },
+      "width": 5,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 120.0,
+        "y": 10.0
+      },
+      "width": 20,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 120.0,
+        "y": 10.0
+      },
+      "width": 20,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 120.0,
+        "y": 10.0
+      },
+      "width": 20,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 360.0,
+        "y": 20.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 360.0,
+        "y": 55.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 390.0,
+        "y": 25.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 425.0,
+        "y": 30.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 430.0,
+        "y": 2.0
+      },
+      "width": 5,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 445.0,
+        "y": 2.0
+      },
+      "width": 15,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 470.0,
+        "y": 10.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 600.0,
+        "y": 40.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 640.0,
+        "y": 40.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 680.0,
+        "y": 30.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.netherrack",
+      "pos": {
+        "x": 700.0,
+        "y": 25.0
+      },
+      "width": 10,
+      "height": 5
+    }
+  ]
+}

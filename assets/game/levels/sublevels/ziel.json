@@ -1,0 +1,46 @@
+{
+  "name": "Nether Sublevel 1",
+  "id": 2,
+  "spawnPoint": {
+    "x": 10.0,
+    "y": 20.0
+  },
+  "gravity": -240.0,
+  "player": {
+    "texture": "game.player.ninja",
+    "jumpStrength": 8000.0,
+    "moveSpeed": 37.0
+  },
+  "nonSolidBlocks": [
+    {
+      "texture": "game.objects.checkpoint_flagge",
+      "pos": {
+        "x": 2.0,
+        "y": 28.0
+      },
+      "onTouch": "ziel",
+      "width": 8,
+      "height": 8
+    }
+  ],
+  "blocks": [
+    {
+      "texture": "game.objects.blocks.roehre_unten",
+      "pos": {
+        "x": 0.0,
+        "y": 20.0
+      },
+      "width": 8,
+      "height": 8
+    },
+    {
+      "texture": "game.objects.blocks.rhoerenblock_unten",
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "width": 8,
+      "height": 20
+    }
+  ]
+}
