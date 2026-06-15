@@ -105,6 +105,12 @@ class UI (
         table.row()
     }
 
+    fun handleFinish(){
+        timer.stop()
+        displaySplashNotification("Ziel erreicht! Zeit: ${timer.getAsFullString()}")
+        splashNotificationSetTime = System.currentTimeMillis() + 5000
+    }
+
     fun displaySplashNotification(notification: String){
         splashNotification = notification
         splashNotificationSetTime = System.currentTimeMillis()

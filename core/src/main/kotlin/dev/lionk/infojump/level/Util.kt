@@ -21,6 +21,7 @@ data class LevelPreset(
     val name: String,
     val id: Int,
     val spawnPoint: Pos,
+    val color: String?=null,
     val buttons:List<String>?=null,
     val gravity: Float,
     val player: PlayerConfig,
@@ -28,6 +29,14 @@ data class LevelPreset(
     val blocks: List<BlockPreset>,
     val nonSolidBlocks: List<NonSolidBlockPreset>?=null,
 )
+
+data class MovingBlock(
+    val speed:Float,
+    val targetPos:Pos,
+    val waitDuration:Float,
+){
+
+}
 
 data class Sublevel(
     val path: String,
@@ -50,6 +59,7 @@ data class BlockPreset(
     val rotation:Float?=null,
     val fitSize: Boolean?=false,
     val restitution:Float?=null,
+    val movement: MovingBlock?=null,
     val friction:Float?=null,
 )
 data class NonSolidBlockPreset(
@@ -58,5 +68,6 @@ data class NonSolidBlockPreset(
     val pos: Pos,
     val width: Float?=null,
     val height: Float,
+    val climbable:Boolean?=false,
     val rotation: Float? = null,
 )

@@ -11,6 +11,7 @@ data class LoginPayload(val username: String) : Payload
 @Serializable
 data class PlayerUpdatePayload(
     val x: Float, val y: Float,
+    val currentLevel:Int?=null,
     val player: String) : Payload
 
 @Serializable
@@ -34,6 +35,11 @@ data class HandshakePayload(
     val success: Boolean,
     val players: List<Player>,
 ) : Payload
+@Serializable
+data class ConnectionErrorPayload(
+    val errorMessage: String,
+    val critical: Boolean,
+)
 @Serializable
 data class Player(
     val name: String,

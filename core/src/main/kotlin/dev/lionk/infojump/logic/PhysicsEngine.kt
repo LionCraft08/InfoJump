@@ -46,7 +46,7 @@ class PhysicsEngine(
 //            }
 //        }
 
-        world.step(delta, 6, 2)
+        world.step(delta.coerceAtMost(0.25f), 6, 2)
         for (request in teleportQueues) {
             if (request.body != null) {
                 request.body.setTransform(request.targetX, request.targetY, request.body.angle)

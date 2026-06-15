@@ -67,7 +67,7 @@ class GameView(
 
 
     override fun render() {
-        ScreenUtils.clear(Color.BLACK)
+        ScreenUtils.clear(GameManager.getCurrentLevel().backgroundColor)
 
         //println("FPS: " + Gdx.graphics.getFramesPerSecond() + " | DT: " + Gdx.graphics.getDeltaTime());
         viewport.apply()
@@ -139,11 +139,17 @@ class GameView(
         // Jump
         if (
             Gdx.input.isKeyPressed(Input.Keys.UP)
-            && level.physicsEngine.contactListener.footContacts > 0
-            && System.currentTimeMillis() - lastJumpTick > 50
         ) {
-            level.player.body.applyLinearImpulse(0f, jumpImpulse, level.player.body.worldCenter.x, level.player.body.worldCenter.y, true)
-            lastJumpTick = System.currentTimeMillis()
+            if(level.physicsEngine.contactListener.climbBlockContacts > 0){
+                level.player.body.setLinearVelocity(
+                    level.player.body.linearVelocity.x,
+                    25f
+                )
+            }else if(level.physicsEngine.contactListener.footContacts > 0
+                && System.currentTimeMillis() - lastJumpTick > 50){
+                level.player.body.applyLinearImpulse(0f, jumpImpulse, level.player.body.worldCenter.x, level.player.body.worldCenter.y, true)
+                lastJumpTick = System.currentTimeMillis()
+            }
         }
 
         physicsAlpha = level.physicsEngine.update(Gdx.graphics.deltaTime)

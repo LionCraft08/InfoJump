@@ -2,6 +2,7 @@ package dev.lionk.infojump.game
 
 import dev.lionk.infojump.Main
 import dev.lionk.infojump.level.Level
+import dev.lionk.infojump.views.GameView
 
 abstract class AbstractGame (
     protected val levels: List<String>
@@ -9,7 +10,8 @@ abstract class AbstractGame (
     abstract fun loadLevel(key: String): Level
     var currentLevel: Level
         private set
-    protected var currentLevelIndex = 0
+    var currentLevelIndex = 0
+        protected set
 
     init {
         currentLevel = loadLevel(levels[currentLevelIndex])
@@ -18,9 +20,14 @@ abstract class AbstractGame (
     fun nextLevel(){
         currentLevelIndex++
         if(levels.size <= currentLevelIndex) {
-            Main.INSTANCE.changeView("menu")
+            finishGame()
         }else{
             currentLevel = loadLevel(levels[currentLevelIndex])
         }
+    }
+
+    fun finishGame(){
+        val gameView = Main.INSTANCE.getView() as GameView
+        gameView.ui.handleFinish()
     }
 }

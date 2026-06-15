@@ -5,6 +5,7 @@ import dev.lionk.infojump.LionLog
 import dev.lionk.infojump.Main
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.game.GameManager
+import dev.lionk.infojump.payloads.ConnectionErrorPayload
 import dev.lionk.infojump.payloads.EndGamePayload
 import dev.lionk.infojump.payloads.HandshakePayload
 import dev.lionk.infojump.payloads.LionDeserialization
@@ -17,6 +18,7 @@ import dev.lionk.infojump.payloads.ServerAssetsSendPayload
 import dev.lionk.infojump.payloads.StartGamePayload
 import dev.lionk.infojump.tick.TickManager
 import dev.lionk.infojump.tick.TickQueue
+import dev.lionk.infojump.views.ConnectionStage
 import dev.lionk.infojump.views.GameView
 import dev.lionk.infojump.views.MultiplayerView
 
@@ -34,14 +36,13 @@ object MultiplayerManager {
         name:String,
     ): Boolean{
         return try {
-            tcpConnection.connect(ip, port.toInt(), LoginPayload(name))
             this.name = name
+            tcpConnection.connect(ip, port.toInt(), LoginPayload(name))
             true
         }catch (e:Exception){
             handleError(e)
             false
         }
-
     }
 
     fun getPlayers():List<Player>{
@@ -72,6 +73,9 @@ object MultiplayerManager {
                 val view = Main.INSTANCE.getView() as? MultiplayerView
                 view?.handleHandshake(payload)
             }
+            is ConnectionErrorPayload -> {
+                handleError(payload.errorMessage)
+            }
             is PlayerListUpdatePayload -> {
                 val view = Main.INSTANCE.getView() as? MultiplayerView
                 view?.handlePlayerListUpdate(payload)
@@ -92,7 +96,8 @@ object MultiplayerManager {
             }
             is PlayerUpdatePayload -> {
                 val view = Main.INSTANCE.getView() as? GameView
-                view?.multiplayerGameAddon?.updatePlayerPos(payload.player, payload.x, payload.y)
+                view?.multiplayerGameAddon?.updatePlayerPos(
+                    payload.player, payload.currentLevel, payload.x, payload.y)
             }
             is EndGamePayload -> {
                 TickQueue.addFunction {
@@ -100,6 +105,12 @@ object MultiplayerManager {
                 }
             }
         }
+    }
+
+    fun handleError(error:String){
+        val view = Main.INSTANCE.getView() as? MultiplayerView
+        view?.connectionStage = ConnectionStage.Error
+        view?.setInfoText(error)
     }
 
     fun getAsset(key: String): String {
@@ -114,6 +125,7 @@ object MultiplayerManager {
             LionDeserialization.serialize(
                 PlayerUpdatePayload(
                     posX,posY,
+                    currentLevel = GameManager.game?.currentLevelIndex,
                     name!!
                 )
             )
@@ -133,6 +145,8 @@ object MultiplayerManager {
 
     private fun handleError(e: Exception){
         name = null
+        val view = Main.INSTANCE.getView() as? MultiplayerView
+        view?.connectionStage = ConnectionStage.Error
         LionLog.client("Verbindung konnte nicht aufgebaut werden: ${e.message}")
     }
 }

@@ -31,6 +31,16 @@ object TextureManager {
         return FileHandle(file)
     }
 
+    fun loadDirectory(name: String):FileHandle{
+        val path = "assets\\"+name.replace(".", "\\")
+        val file = File(path)
+        if(!file.isDirectory){
+            System.err.println(file.absolutePath)
+            throw IllegalArgumentException("Ordner $name existiert nicht")
+        }
+        return FileHandle(file)
+    }
+
     fun getTextureSet(name:String): List<Texture>{
         val list = mutableListOf(getTexture(name))
         try {

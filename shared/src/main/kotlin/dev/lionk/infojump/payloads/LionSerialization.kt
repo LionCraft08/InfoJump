@@ -19,6 +19,7 @@ object LionDeserialization {
         registerType<ReadyPayload>()
         registerType<StartGamePayload>()
         registerType<EndGamePayload>()
+        registerType<ConnectionErrorPayload>()
     }
 
     val jsonFormat: Json = Json {

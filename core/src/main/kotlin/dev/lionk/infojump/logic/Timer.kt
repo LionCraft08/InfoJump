@@ -21,6 +21,8 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
+private const val TIMER_TICK_TIME = 10L
+
 class Timer(
 ) {
     private var duration: Duration = Duration.ZERO
@@ -33,10 +35,10 @@ class Timer(
     fun start() {
         isActive = true
         scope.launch {
-            sleep(100)
+            sleep(TIMER_TICK_TIME)
             while (isActive) {
-                duration = duration.plus(100.toDuration(DurationUnit.MILLISECONDS))
-                sleep(100)
+                duration = duration.plus(TIMER_TICK_TIME.toDuration(DurationUnit.MILLISECONDS))
+                sleep(TIMER_TICK_TIME)
             }
         }
     }
@@ -45,12 +47,30 @@ class Timer(
         val x = 30f//(Gdx.graphics.width - layout.width) / 2
         val y = Gdx.graphics.height - 50f // Top center
 
-        font.draw(uiBatch, getAsString(), x, y)
+        font.draw(uiBatch, if(isActive) getAsString() else getAsFullString(), x, y)
 
     }
     fun stop() {
         isActive = false
     }
-    fun getAsString(): String = duration.toString()
+    //fun getAsString(): String = duration.toString()
+    fun getAsFullString(): String{
+        val hours = duration.inWholeHours
+        val minutes = duration.inWholeMinutes - hours * 60
+        val seconds = duration.inWholeSeconds - duration.inWholeMinutes * 60
+        val milliseconds = duration.inWholeMilliseconds - duration.inWholeSeconds * 1000
+        return if(hours > 0) "${hours}h " else "" +
+            "${minutes}m " +
+            "${seconds}s " +
+            "${milliseconds}ms"
+    }
+    fun getAsString(): String{
+        val hours = duration.inWholeHours
+        val minutes = duration.inWholeMinutes - hours * 60
+        val seconds = duration.inWholeSeconds - duration.inWholeMinutes * 60
+        return if(hours > 0) "${hours}h " else "" +
+            "${minutes}m " +
+            "${seconds}s "
+    }
 
 }

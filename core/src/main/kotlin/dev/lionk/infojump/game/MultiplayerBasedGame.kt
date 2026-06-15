@@ -11,6 +11,6 @@ class MultiplayerBasedGame(
 ) {
     override fun loadLevel(key: String): Level {
         currentLevelIndex = levels.indexOf(key)
-        return LevelLoader.loadLevelFromDeserializedString(MultiplayerManager.getAsset("game.levels.$key"))
+        return LevelLoader.loadLevelFromDeserializedString(MultiplayerManager.getAsset("game.levels.$key"), true)
     }
 }

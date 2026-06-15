@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
@@ -37,11 +38,34 @@ class MultiplayerView: AbstractView() {
     val portInput : InputField
     val usernameInput : InputField
     var connectionStage : ConnectionStage = ConnectionStage.WaitingForInput
+        set(value) {
+            field = value
+            if(value != ConnectionStage.WaitingForInput)
+            setInfoText(
+                when(value){
+                    ConnectionStage.Connected -> "Verbindung wurde erfolgreich hergestellt."
+                    ConnectionStage.WaitingForHandshake -> "Warte auf Serverantwort..."
+                    ConnectionStage.TCPConnecting -> "Verbinde mit Server..."
+                    ConnectionStage.Error -> "Bei der Verbindung mit dem Server\nist ein Fehler aufgetreten"
+                    ConnectionStage.InputError -> "Beim Verbinden ist ein Fehler aufgetreten.\nBitte überprüfe deine Eingaben"
+                    ConnectionStage.InputMissing -> "Bitte fülle alle Felder aus"
+                    ConnectionStage.WaitingForInput -> throw Exception("Stub!!")
+                },
+                isError = (value != ConnectionStage.Connected)
+                    &&value != ConnectionStage.WaitingForHandshake
+                    &&value != ConnectionStage.TCPConnecting,
+            )
+        }
     val loginTable = Table()
+    val infoTable = Table()
 
     init {
         Gdx.input.inputProcessor = stage
 
+
+        infoTable.setFillParent(true)
+        infoTable.top()
+        infoTable.debug = Settings.isDebugging
 
         loginTable.setFillParent(false)
         loginTable.setDebug(Settings.isDebugging)
@@ -65,7 +89,7 @@ class MultiplayerView: AbstractView() {
 
         portInput = InputField(
             "Port",
-            "67810",
+            "67890",
             font
         )
 
@@ -98,7 +122,14 @@ class MultiplayerView: AbstractView() {
                         && !portInput.getText().isNullOrBlank()
                         && !usernameInput.getText().isNullOrBlank()) {
                         connectionStage = ConnectionStage.TCPConnecting
-                        MultiplayerManager.connect(ipInput.getText(), portInput.getText(), usernameInput.getText())
+                        connectionStage =
+                            if(MultiplayerManager.connect(ipInput.getText(), portInput.getText(), usernameInput.getText())){
+                                ConnectionStage.TCPConnecting
+                            }else{
+                                ConnectionStage.InputError
+                            }
+                    }else{
+                        connectionStage = ConnectionStage.InputMissing
                     }
                 }
             }
@@ -128,7 +159,20 @@ class MultiplayerView: AbstractView() {
         container.setFillParent(true)
 
         stage.addActor(container)
+        stage.addActor(infoTable)
 
+    }
+
+    fun setInfoText(text: String, isError:Boolean?=false) {
+        infoTable.clear()
+        infoTable.add(
+            TextButton(
+                text,
+                TextButton.TextButtonStyle(buttonBackground, null, null, font).apply {
+                    fontColor = if (isError == true) Color.ORANGE else Color.WHITE
+                }
+            )
+        )
     }
 
     fun handleHandshake(
@@ -138,7 +182,9 @@ class MultiplayerView: AbstractView() {
             loginTable.isVisible = false
             createMultiplayerView(handshake.players)
             connectionStage = ConnectionStage.Connected
-        }else connectionStage = ConnectionStage.WaitingForInput
+        }else {
+            connectionStage = ConnectionStage.WaitingForInput
+        }
     }
 
     fun handlePlayerListUpdate(
@@ -227,5 +273,9 @@ class MultiplayerView: AbstractView() {
 enum class ConnectionStage{
     WaitingForInput,
     TCPConnecting,
+    InputError,
+    InputMissing,
+    Error,
+    WaitingForHandshake,
     Connected
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape
 import dev.lionk.infojump.Main
 import dev.lionk.infojump.actions.ActionManager
 import dev.lionk.infojump.data.Settings
+import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.GameView
@@ -25,13 +26,16 @@ open class PlayerEntity (
 ): Entity("game.player.ninja", physicsEngine, initialPosition = initialPosition, description = "player") {
 
     private val texture = TextureManager.getTexture("game.player.ninja_overlay")
+    private val posIndicator = TextureManager.getTexture("game.player.position_arrow")
     private val overlaySprite = Sprite(texture)
+    private val posSprite = Sprite(posIndicator)
 
     private var health: Int = healthAtStart
 
     init {
 //        val textureFactor = 10f / texture.height
 //        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
+        posSprite.setScale(0.3f)
         overlaySprite.setSize(super.sprite.width, super.sprite.height)
         colorSprite()
     }
@@ -73,6 +77,10 @@ open class PlayerEntity (
             currentY()
         )
         super.render(spriteBatch, physicsAlpha)
+        if(body.position.y >= 73f) {
+            posSprite.setPosition(body.position.x -posSprite.width/2, 60f)
+            posSprite.draw(spriteBatch)
+        }
 
         overlaySprite.draw(spriteBatch)
 

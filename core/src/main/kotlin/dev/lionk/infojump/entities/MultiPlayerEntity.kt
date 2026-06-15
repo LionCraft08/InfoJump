@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Align
 import dev.lionk.infojump.data.Settings
+import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.level.Pos
 import dev.lionk.infojump.level.toPos
 import dev.lionk.infojump.logic.PhysicsEngine
@@ -33,6 +34,7 @@ class MultiPlayerEntity(
     val sprite = Sprite(texture)
     private val overlayTexture = TextureManager.getTexture("${textureID}_overlay")
     private val overlaySprite = Sprite(overlayTexture)
+    private var shouldBeRendered = true
     init {
         font.setUseIntegerPositions(false);
         //font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -48,7 +50,10 @@ class MultiPlayerEntity(
     protected var currentPos: Pos = initialPosition.toPos()
     private var lastUpdate: Long = 0
 
-    fun updatePos(currentPos: Pos) {
+    fun updatePos(currentPos: Pos, level: Int?) {
+        if(level != GameManager.game?.currentLevelIndex) {
+            shouldBeRendered = false
+        }
         lastUpdate = System.currentTimeMillis()
         this.previousPos = this.currentPos
         this.currentPos = currentPos
@@ -69,6 +74,8 @@ class MultiPlayerEntity(
 
 
     fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){
+        if(!shouldBeRendered) return
+
         val tickAlpha: Float = ((System.currentTimeMillis() - lastUpdate) / TickManager.tickRateMs.toFloat()).coerceAtMost(1f)
         val renderX = MathUtils.lerp(previousPos.x, currentPos.x, tickAlpha) - (sprite.width / 2f)
         val renderY = MathUtils.lerp(previousPos.y, currentPos.y, tickAlpha) - (sprite.height / 2f)

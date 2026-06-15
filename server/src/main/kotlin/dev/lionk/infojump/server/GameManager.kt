@@ -78,6 +78,13 @@ object GameManager {
         LionLog.server("Player $name disconnected")
     }
 
+    fun getPlayers(): List<Player> = players.values.toList()
+    fun getPlayerAddresses(): List<String> = players.keys.toList()
+    fun getPlayer(address: String): Player? = if(players.contains(address)) players[address] else null
+    fun getPlayerByName(name: String): Player? {
+        return getPlayers().find { it.name == name }
+    }
+
     fun stopGame() {
         server.send(LionDeserialization.serialize(
             EndGamePayload(false)

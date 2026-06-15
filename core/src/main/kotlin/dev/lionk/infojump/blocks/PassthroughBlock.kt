@@ -11,6 +11,7 @@ class PassthroughBlock(
     texture: String,
     pos: Vector2,
     width: Float?=null,
+    climbable:Boolean?=null,
     height: Float,
     rotation: Float?=null,
 ): AbstractBlock(
@@ -20,7 +21,7 @@ class PassthroughBlock(
     actualWidth = width,
     actualHeight = height,
     angle = rotation ?: 0f,
-    onTouch = onTouch,
+    onTouch = onTouch?:if(climbable?:false)"climbable" else null,
 ) {
     init {
 

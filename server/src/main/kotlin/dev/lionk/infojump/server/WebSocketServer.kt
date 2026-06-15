@@ -26,7 +26,7 @@ class WebSocketServer(
 
     // Callback for when a message is received
     var onReceive: ((sourceAddress: String, message: String) -> Unit)? = { sourceAddress, message ->
-        LionLog.server("Received message from $sourceAddress: $message")
+        //LionLog.server("Received message from $sourceAddress: $message")
         PayloadManager.handleMessage(sourceAddress, message)
     }
 

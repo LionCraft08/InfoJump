@@ -1,5 +1,6 @@
 package dev.lionk.infojump.level
 
+import com.badlogic.gdx.graphics.Color
 import com.google.gson.Gson
 import dev.lionk.infojump.blocks.PassthroughBlock
 import dev.lionk.infojump.blocks.StaticBlock
@@ -23,7 +24,8 @@ object LevelLoader {
         val levelPreset = deserializeLevel(levelJson)
         val level = Level(
             spawnPos = levelPreset.spawnPoint,
-            levelPreset = levelPreset
+            levelPreset = levelPreset,
+            backgroundColor = if(levelPreset.color != null)Color.valueOf(levelPreset.color) else Color.SKY
         )
         addObjects(levelPreset, level, Pos(0f, 0f),multiplayer)
 
@@ -38,6 +40,7 @@ object LevelLoader {
                 pos = block.pos.toVector().add(initPos.toVector()),
                 height = block.height,
                 width = block.width,
+                movement = block.movement?.copy(targetPos = block.movement.targetPos.toVector().add(initPos.toVector()).toPos()),
                 rotation = block.rotation,
                 restitution = block.restitution,
                 friction = block.friction,
@@ -51,6 +54,7 @@ object LevelLoader {
                 pos = block.pos.toVector().add(initPos.toVector()),
                 height = block.height,
                 width = block.width,
+                climbable = block.climbable,
                 rotation = block.rotation,
             ))
         }

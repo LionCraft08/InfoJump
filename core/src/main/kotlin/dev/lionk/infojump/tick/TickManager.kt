@@ -19,7 +19,7 @@ object TickManager {
         if (running.getAndSet(true)) return // Already running
 
         thread = Thread {
-            println("Tick engine started.")
+            println("Tick engine gestartet.")
 
             while (running.get()) {
                 val startTime = System.currentTimeMillis()
@@ -41,7 +41,6 @@ object TickManager {
                         Thread.currentThread().interrupt()
                     }
                 } else if (elapsed > tickRateMs) {
-                    // Logic for "Server Hanging" or "Can't keep up!"
                     println("Tick took too long! ($elapsed ms / $tickRateMs ms)")
                 }
             }

@@ -30,9 +30,10 @@ class MultiplayerGameAddon(
         }
     }
 
-    fun updatePlayerPos(player: String, x: Float, y: Float) {
+    fun updatePlayerPos(player: String, level:Int?, x: Float, y: Float) {
         players[player]?.updatePos(
             Pos(x,y),
+            level
         )
     }
 

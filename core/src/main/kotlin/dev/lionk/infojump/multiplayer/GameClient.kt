@@ -1,9 +1,13 @@
 package dev.lionk.infojump.multiplayer
 
 import dev.lionk.infojump.LionLog
+import dev.lionk.infojump.Main
+import dev.lionk.infojump.game.Game
 import dev.lionk.infojump.payloads.LionDeserialization
 import dev.lionk.infojump.payloads.LoginPayload
 import dev.lionk.infojump.payloads.Payload
+import dev.lionk.infojump.views.ConnectionStage
+import dev.lionk.infojump.views.MultiplayerView
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -22,6 +26,8 @@ class GameClient {
                 `in` = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 
                 LionLog.client("Erfolgreich verbunden mit ${socket!!.inetAddress}:${socket!!.port}")
+                val view = Main.INSTANCE.getView() as? MultiplayerView
+                view?.connectionStage = ConnectionStage.WaitingForHandshake
 
                 out!!.println(LionDeserialization.serialize(setup))
 
@@ -32,6 +38,8 @@ class GameClient {
                     MultiplayerManager.handleIncomingMessage(serverMessage)
                 }
             } catch (e: Exception) {
+                val view = Main.INSTANCE.getView() as? MultiplayerView
+                view?.connectionStage = ConnectionStage.Error
                 e.printStackTrace()
             }
         }.start()

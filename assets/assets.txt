@@ -13,13 +13,20 @@ game/levels/example_level_2.json
 game/levels/example_sublevel.json
 game/levels/leon/example_level.json
 game/levels/leon/example_sublevel.json
+game/levels/nether_level.json
 game/levels/sublevel_1.json
+game/levels/sublevels/nether_s1.json
+game/levels/sublevels/nether_s2.json
+game/levels/sublevels/ziel.json
+game/objects/blocks/ghast.png
 game/objects/blocks/holzblock.png
 game/objects/blocks/holzblock_lang.png
+game/objects/blocks/netherrack.png
 game/objects/blocks/rhoerenblock_oben.png
 game/objects/blocks/rhoerenblock_unten.png
 game/objects/blocks/roehre_oben.png
 game/objects/blocks/roehre_unten.png
+game/objects/blocks/twisted_vine.png
 game/objects/checkpoint_flagge.png
 game/objects/fluids/lava_block.png
 game/objects/fluids/lava_stange.png
@@ -30,6 +37,8 @@ game/objects/herz.png
 game/objects/herz_weg.png
 game/objects/info.txt
 game/objects/muenze.png
+game/partikel/checkpoint.p
+game/partikel/particle-star.png
 game/player/ninja - Kopie.png
 game/player/ninja.png
 game/player/ninja/Ninja laufanimation.png
@@ -44,6 +53,7 @@ game/player/ninja_mirrored.png
 game/player/ninja_overlay.png
 game/player/ninja_overlay_mirrored.png
 game/player/ninja_preset.png
+game/player/position_arrow.png
 game/player/raeuber/raeuber static - Kopie (2).png
 game/player/raeuber/raeuber static - Kopie (3).png
 game/player/raeuber/raeuber static - Kopie (4).png
@@ -59,6 +69,8 @@ hund.png
 menu/background.png
 menu/background2.png
 menu_multiplayer/background.png
+partikel/checkpoint.p
+partikel/particle-star.png
 ui/buttons/default.png
 ui/buttons/default_pressed.png
 ui/buttons/haken.png

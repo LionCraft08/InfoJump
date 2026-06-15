@@ -1,6 +1,9 @@
 package dev.lionk.infojump.level
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.ParticleEffect
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import dev.lionk.infojump.blocks.AbstractBlock
@@ -10,11 +13,13 @@ import dev.lionk.infojump.entities.Entity
 import dev.lionk.infojump.entities.PlayerEntity
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.logic.Timer
+import dev.lionk.infojump.rendering.TextureManager
 
 class Level (
     val spawnPos: Pos,
     private val blocks: MutableList<AbstractBlock> = mutableListOf(),
     private val entities: MutableList<Entity> = mutableListOf(),
+    val backgroundColor: Color = Color.SKY,
     levelPreset: LevelPreset?=null
 ){
     val player : PlayerEntity
@@ -27,6 +32,7 @@ class Level (
             PhysicsEngine()
         }else PhysicsEngine(levelPreset.gravity)
     val menuButtons:List<String>?=levelPreset?.buttons
+    private val particles: MutableList<ParticleEffect> = mutableListOf()
 
     init {
         player = ControlledPlayerEntity(physicsEngine = physicsEngine, initialPosition = spawnPos.toVector())
@@ -36,6 +42,17 @@ class Level (
 
     fun addBlock(block: AbstractBlock) {
         blocks.add(block)
+    }
+
+    fun addEffect(id:String, pos: Pos) {
+        val effect = ParticleEffect()
+        effect.load(TextureManager.loadAsset(id, "p"),
+            TextureManager.loadDirectory(id.substringBeforeLast(".")))
+        effect.setPosition(pos.x, pos.y)
+        effect.start()
+        effect.scaleEffect(0.25f)
+        particles.add(effect)
+
     }
 
     fun dispose(){
@@ -50,5 +67,8 @@ class Level (
         blocks.forEach { it.render(spriteBatch) }
         entities.forEach { it.render(spriteBatch, physicsAlpha) }
         player.render(spriteBatch, physicsAlpha)
+        particles.forEach {
+            it.draw(spriteBatch, Gdx.graphics.deltaTime)
+        }
     }
 }
