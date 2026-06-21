@@ -1,5 +1,6 @@
 .gitkeep
 background.jpg
+game/background/death_screen.png
 game/background/wolken/wolke.png
 game/background/wolken/wolke2.png
 game/background/wolken/wolke3.png
@@ -14,7 +15,10 @@ game/levels/example_sublevel.json
 game/levels/leon/example_level.json
 game/levels/leon/example_sublevel.json
 game/levels/nether_level.json
+game/levels/old/example_level.json
+game/levels/old/sublevel_1.json
 game/levels/sublevel_1.json
+game/levels/sublevel_2.json
 game/levels/sublevels/nether_s1.json
 game/levels/sublevels/nether_s2.json
 game/levels/sublevels/ziel.json

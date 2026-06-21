@@ -1,6 +1,7 @@
 package dev.lionk.infojump.views
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import dev.lionk.infojump.Main
+import dev.lionk.infojump.data.KeyAction
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.menu.MenuBackground
@@ -37,8 +39,7 @@ class MenuView(
 
         stage = Stage(ScreenViewport())
 
-        Gdx.input.setInputProcessor(stage)
-
+        Gdx.input.inputProcessor = stage
 
         buttonBackground = NinePatchDrawable(NinePatch(
             TextureManager.getTexture("ui.buttons.default"), 8, 8, 8, 8))
@@ -121,27 +122,14 @@ class MenuView(
         stage!!.dispose()
     }
 
+
     override fun handleInput() {
 
     }
 
     override fun onResize(width: Int, height: Int) {
         background.onResize(width, height)
-        //topImage.height = height.toFloat()
         stage?.viewport?.update(width, height, true)
 
     }
-//    private fun resizeBackgroundImage(newWidth:Float? = null, newHeight:Float? = null) {
-//        val image = topImage
-//        if(newWidth != null) {
-//            val rescaleFactor = newWidth / image.width
-//            image.width = newWidth
-//            image.height *= rescaleFactor
-//        } else
-//        if(newHeight != null) {
-//            val rescaleFactor = newHeight / image.height
-//            image.height = newHeight
-//            image.width *= rescaleFactor
-//        }
-//    }
 }

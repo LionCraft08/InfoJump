@@ -26,6 +26,18 @@ data class StartGamePayload(
 ): Payload
 
 @Serializable
+data class PlayerFinishNotificationPayload(
+    val player:String,
+)
+
+
+@Serializable
+data class PlayerFinishPayload(
+    val player:String,
+    val time:Long,
+)
+
+@Serializable
 data class EndGamePayload(
     val successful:Boolean,
 )
@@ -46,7 +58,8 @@ data class Player(
     val character: String,
     val color: Long,
     var ready: Boolean,
-) : Payload
+    var isFinished:Boolean = false,
+    ) : Payload
 @Serializable
 data class PlayerListUpdatePayload(
     val list: List<Player>,

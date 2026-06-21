@@ -23,10 +23,6 @@ class PassthroughBlock(
     angle = rotation ?: 0f,
     onTouch = onTouch?:if(climbable?:false)"climbable" else null,
 ) {
-    init {
-
-    }
-
     override fun createFixture(shape: Shape): FixtureDef {
         return FixtureDef().apply {
             this.shape = shape

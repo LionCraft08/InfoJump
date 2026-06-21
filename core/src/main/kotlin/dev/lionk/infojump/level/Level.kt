@@ -63,9 +63,16 @@ class Level (
         skin.dispose()
     }
 
-    fun render(spriteBatch: SpriteBatch, physicsAlpha: Float) {
+    fun render(spriteBatch: SpriteBatch, physicsAlpha: Float, deathAnimationStage:Float) {
         blocks.forEach { it.render(spriteBatch) }
         entities.forEach { it.render(spriteBatch, physicsAlpha) }
+        if(deathAnimationStage > 1){
+            player.setOpacity((deathAnimationStage - 1f).coerceIn(0f, 1f))
+        }else if(deathAnimationStage >= 0){
+            player.setOpacity(1 - deathAnimationStage.coerceAtMost(1f))
+        }else{
+            player.setOpacity(1f)
+        }
         player.render(spriteBatch, physicsAlpha)
         particles.forEach {
             it.draw(spriteBatch, Gdx.graphics.deltaTime)

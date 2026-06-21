@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import dev.lionk.infojump.Main
@@ -44,6 +45,13 @@ open class PlayerEntity (
         return health
     }
 
+    fun addHealth() {
+        health++
+        if(health > healthAtStart){
+            health = healthAtStart
+        }
+    }
+
     fun removeHealth(): Boolean{
         health--
         (Main.INSTANCE.getView() as? GameView)?.ui?.updateHealth()
@@ -71,13 +79,26 @@ open class PlayerEntity (
         )
     }
 
+    fun setOpacity(opacity: Float){
+        super.sprite.setAlpha(opacity)
+    }
+
+    fun setFrozen(frozen: Boolean){
+        if(frozen){
+            body.setLinearVelocity(0f, 0f)
+            body.type = BodyDef.BodyType.StaticBody
+        }else{
+            body.type = BodyDef.BodyType.DynamicBody
+        }
+    }
+
     override fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){
         overlaySprite.setPosition(
             currentX(),
             currentY()
         )
         super.render(spriteBatch, physicsAlpha)
-        if(body.position.y >= 73f) {
+        if(body.position.y >= 74f) {
             posSprite.setPosition(body.position.x -posSprite.width/2, 60f)
             posSprite.draw(spriteBatch)
         }

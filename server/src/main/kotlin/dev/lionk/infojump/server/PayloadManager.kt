@@ -3,6 +3,8 @@ package dev.lionk.infojump.server
 import dev.lionk.infojump.payloads.ConnectionErrorPayload
 import dev.lionk.infojump.payloads.LionDeserialization
 import dev.lionk.infojump.payloads.LoginPayload
+import dev.lionk.infojump.payloads.PlayerFinishNotificationPayload
+import dev.lionk.infojump.payloads.PlayerFinishPayload
 import dev.lionk.infojump.payloads.PlayerUpdatePayload
 import dev.lionk.infojump.payloads.ReadyPayload
 
@@ -30,6 +32,20 @@ object PayloadManager {
             }
             is PlayerUpdatePayload -> {
                 server.send(data, listOf())
+            }
+            is PlayerFinishNotificationPayload -> {
+                GameManager.getPlayer(address)?.let {
+                    if(it.isFinished) return@let
+                    it.isFinished = true
+                    server.send(
+                        LionDeserialization.serialize(PlayerFinishPayload(
+                            wrapper.player,
+                            GameManager.getCurrentIngameTime()
+                        )),
+                        listOf()
+                    )
+                }
+
             }
             is ReadyPayload -> {
                 GameManager.markPlayerAsReady(address)

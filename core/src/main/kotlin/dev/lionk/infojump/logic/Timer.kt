@@ -42,6 +42,11 @@ class Timer(
             }
         }
     }
+    fun updateTime(
+        time: Long
+    ){
+        duration = time.toDuration(DurationUnit.MILLISECONDS)
+    }
     fun draw(font: BitmapFont, uiBatch: Batch){
         //val layout = font.draw(uiBatch, getAsString(), 0f, 0f)
         val x = 30f//(Gdx.graphics.width - layout.width) / 2

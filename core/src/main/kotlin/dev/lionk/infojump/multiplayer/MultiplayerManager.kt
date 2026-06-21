@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import dev.lionk.infojump.LionLog
 import dev.lionk.infojump.Main
 import dev.lionk.infojump.data.Settings
+import dev.lionk.infojump.game.Game
 import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.payloads.ConnectionErrorPayload
 import dev.lionk.infojump.payloads.EndGamePayload
@@ -11,6 +12,8 @@ import dev.lionk.infojump.payloads.HandshakePayload
 import dev.lionk.infojump.payloads.LionDeserialization
 import dev.lionk.infojump.payloads.LoginPayload
 import dev.lionk.infojump.payloads.Player
+import dev.lionk.infojump.payloads.PlayerFinishNotificationPayload
+import dev.lionk.infojump.payloads.PlayerFinishPayload
 import dev.lionk.infojump.payloads.PlayerListUpdatePayload
 import dev.lionk.infojump.payloads.PlayerUpdatePayload
 import dev.lionk.infojump.payloads.ReadyPayload
@@ -53,6 +56,18 @@ object MultiplayerManager {
         tcpConnection.sendData(LionDeserialization.serialize(ReadyPayload(
             name?:""
         )))
+    }
+
+    fun sendGameFinish(){
+        if (isInMultiplayer()){
+            tcpConnection.sendData(
+                LionDeserialization.serialize(
+                    PlayerFinishNotificationPayload(
+                        name!!
+                    )
+                )
+            )
+        }
     }
 
     fun isInMultiplayer(): Boolean{
@@ -98,6 +113,16 @@ object MultiplayerManager {
                 val view = Main.INSTANCE.getView() as? GameView
                 view?.multiplayerGameAddon?.updatePlayerPos(
                     payload.player, payload.currentLevel, payload.x, payload.y)
+            }
+            is PlayerFinishPayload -> {
+                (Main.INSTANCE.getView() as? GameView)?.apply {
+                    if(payload.player == name) {
+                        ui.timer.updateTime(payload.time)
+                        ui.handleFinish()
+                    }
+                    ui.handlePlayerFinish(payload)
+
+                }
             }
             is EndGamePayload -> {
                 TickQueue.addFunction {

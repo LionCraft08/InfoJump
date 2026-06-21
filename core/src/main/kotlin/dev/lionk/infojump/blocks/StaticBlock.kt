@@ -110,13 +110,6 @@ class StaticBlock(
             }
         }
 
-//        if(mouseJoint != null) {
-//            when(movementStage!!){
-//                1 -> moveTo(super.body, movement!!.targetPos.toVector())
-//                3 -> moveTo(super.body, initialPosition)
-//            }
-//        }
-
         super.render(spriteBatch)
 
     }

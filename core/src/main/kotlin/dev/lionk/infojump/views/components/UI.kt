@@ -4,16 +4,20 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Widget
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import dev.lionk.infojump.Main
@@ -22,8 +26,13 @@ import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.game.GameManager
 import dev.lionk.infojump.level.Level
 import dev.lionk.infojump.logic.Timer
+import dev.lionk.infojump.payloads.PlayerFinishPayload
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.GameView
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 
 private const val SPLASH_SCREEN_TIME = 2500L
@@ -43,6 +52,8 @@ class UI (
     private val skin = Skin(Gdx.files.internal("ui/uiskin.json"))
 
     private val health = Table()
+    private val times = Table()
+    private val deathOverlay = Table()
 
     init {
         timer.start()
@@ -79,6 +90,20 @@ class UI (
         updateHealth()
         stage.addActor(health)
 
+
+        val wrapper = Container(times)
+        wrapper.setFillParent(true)
+        wrapper.right()
+        wrapper.pad(10f)
+        wrapper.debug = Settings.isDebugging
+        stage.addActor(wrapper)
+
+        deathOverlay.background(SpriteDrawable(Sprite(TextureManager.getTexture("game.background.death_screen"))))
+        deathOverlay.bottom()
+        deathOverlay.setFillParent(true)
+        deathOverlay.setColor(1f, 1f, 1f, 0f)
+        stage.addActor(deathOverlay)
+
         generator.dispose()
 
     }
@@ -91,6 +116,52 @@ class UI (
                 health.add(Image(TextureManager.getTexture("game.objects.herz")).apply { setScale(3f) }).pad(16f)
             } else health.add(Image(TextureManager.getTexture("game.objects.herz_weg")).apply { setScale(3f) }).pad(16f)
         }
+    }
+
+    private var isFirst = true
+
+    fun handlePlayerFinish(payload: PlayerFinishPayload){
+        val style = TextButton.TextButtonStyle(null, null, null, font)
+        if(isFirst){
+            times.background = NinePatchDrawable(NinePatch(TextureManager.getTexture("ui.buttons.default"), 8, 8, 8, 8))
+            times.add(
+                TextButton(
+                    "Zeiten: ",
+                    style,
+                )
+            )
+            times.row()
+        }
+        isFirst = false
+
+        times.row()
+        times.add(
+            TextButton(
+                payload.player,
+                style,
+            ).apply {
+                pad(5f)
+            }
+        )
+        times.add(
+            TextButton(
+                getAsFullString(payload.time.toDuration(DurationUnit.MILLISECONDS)),
+                style,
+            ).apply {
+                pad(5f)
+            }
+        )
+    }
+
+    private fun getAsFullString(duration: Duration): String{
+        val hours = duration.inWholeHours
+        val minutes = duration.inWholeMinutes - hours * 60
+        val seconds = duration.inWholeSeconds - duration.inWholeMinutes * 60
+        val milliseconds = duration.inWholeMilliseconds - duration.inWholeSeconds * 1000
+        return if(hours > 0) "${hours}h " else "" +
+            "${minutes}m " +
+            "${seconds}s " +
+            "${milliseconds}ms"
     }
 
     private fun addButton(text: String, action: String, table: Table){
@@ -117,10 +188,15 @@ class UI (
     }
 
 
-    fun render(){
+    fun render(deathAnimationStage:Float){
         uiViewport.apply()
         uiBatch.projectionMatrix = uiCamera.combined
 
+        if(deathAnimationStage >= 2f){
+            deathOverlay.setColor(1f, 1f, 1f, (3f - deathAnimationStage).coerceIn(0f, 1f))
+        }else if(deathAnimationStage >= 0){
+            deathOverlay.setColor(1f, 1f, 1f, deathAnimationStage.coerceAtMost(1f))
+        }
 
         uiBatch.begin()
         stage.draw()
@@ -128,6 +204,8 @@ class UI (
         if(System.currentTimeMillis()-splashNotificationSetTime < SPLASH_SCREEN_TIME){
             font.draw(uiBatch, splashNotification, 10f, 70f)
         }
+
+
 
 
         uiBatch.end()

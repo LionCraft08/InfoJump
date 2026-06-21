@@ -14,8 +14,10 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.viewport.FitViewport
 import dev.lionk.infojump.LionLog
+import dev.lionk.infojump.actions.ActionManager
 import dev.lionk.infojump.blocks.AbstractBlock
 import dev.lionk.infojump.blocks.FloorBody
+import dev.lionk.infojump.data.KeyAction
 import dev.lionk.infojump.data.Settings
 import dev.lionk.infojump.entities.PlayerEntity
 import dev.lionk.infojump.game.GameManager
@@ -66,8 +68,23 @@ class GameView(
     )
 
 
+    private var isTPed = false
+
     override fun render() {
         ScreenUtils.clear(GameManager.getCurrentLevel().backgroundColor)
+
+        if(deathAnimationStage >= 0){
+            deathAnimationStage += Gdx.graphics.deltaTime
+            if(deathAnimationStage >= 1 && !isTPed) {
+                isTPed = true
+                ActionManager.handleAction("deathTP")
+            }
+            if(deathAnimationStage >= 3){
+                ActionManager.handleAction("finalDeathInstant")
+                isTPed = false
+                deathAnimationStage = -1f
+            }
+        }
 
         //println("FPS: " + Gdx.graphics.getFramesPerSecond() + " | DT: " + Gdx.graphics.getDeltaTime());
         viewport.apply()
@@ -80,14 +97,15 @@ class GameView(
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin()
         //spriteBatch.draw(TextureManager.getTexture("game.env.background"), 0f, 0f, viewport.worldWidth, viewport.worldHeight)
-        GameManager.getCurrentLevel().render(spriteBatch, physicsAlpha)
+        GameManager.getCurrentLevel().render(spriteBatch, physicsAlpha, deathAnimationStage)
         multiplayerGameAddon?.render(Gdx.graphics.deltaTime, spriteBatch)
         spriteBatch.end()
 
 
         if(Settings.isDebugging)
             debugRenderer.render(GameManager.getCurrentLevel().physicsEngine.getWorld(), viewport.camera.combined)
-        ui.render() //UI
+
+        ui.render(deathAnimationStage) //UI
 
         //Camera
 
@@ -103,6 +121,14 @@ class GameView(
             if(abs(camera.position.x - camMovingDest!!) < 0.5) camMovingDest = null
         }
 
+    }
+
+    private var deathAnimationStage = -1f
+    fun triggerDeath(){
+        ui.updateHealth()
+        if(deathAnimationStage == -1f){
+            deathAnimationStage = 0f
+        }
     }
 
     override fun dispose() {
@@ -124,11 +150,11 @@ class GameView(
         val moveSpeed = level.moveSpeed
 
         var horizontalDirection = 0f
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Settings.keys[KeyAction.Left]!!)) {
             horizontalDirection -= 1f
             level.player.setWalkDirection(left=true)
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Settings.keys[KeyAction.Right]!!)) {
             horizontalDirection += 1f
             level.player.setWalkDirection(left=false)
         }
@@ -136,17 +162,18 @@ class GameView(
         level.player.body.setLinearVelocity(horizontalDirection * moveSpeed, velocity.y)
 
 
-        // Jump
+        // Sprung handling
         if (
-            Gdx.input.isKeyPressed(Input.Keys.UP)
+            Gdx.input.isKeyPressed(Settings.keys[KeyAction.Jump]!!)
         ) {
             if(level.physicsEngine.contactListener.climbBlockContacts > 0){
                 level.player.body.setLinearVelocity(
                     level.player.body.linearVelocity.x,
                     25f
                 )
-            }else if(level.physicsEngine.contactListener.footContacts > 0
-                && System.currentTimeMillis() - lastJumpTick > 50){
+            }else if((level.physicsEngine.contactListener.footContacts > 0
+                    ||level.physicsEngine.contactListener.timeSinceLastContact() < 100)
+                && System.currentTimeMillis() - lastJumpTick > 200){
                 level.player.body.applyLinearImpulse(0f, jumpImpulse, level.player.body.worldCenter.x, level.player.body.worldCenter.y, true)
                 lastJumpTick = System.currentTimeMillis()
             }
@@ -158,7 +185,6 @@ class GameView(
     override fun onResize(width: Int, height: Int) {
         camMovingDest = GameManager.getCurrentLevel().player.body.position.x + CAMERA_MOVE_OFFSET
         viewport.update(width, height, true)
-        // Update UI camera on resize as well
         ui.onResize(width.toFloat(), height.toFloat())
     }
 

@@ -3,12 +3,9 @@
   "id": 1,
   "spawnPoint": {
     "x": 10.0,
-    "y": 30.0
+    "y": 20.0
   },
-  "buttons": [
-    "teleport:470:200",
-    "checkpointSetzen"
-  ],
+  "buttons": [],
   "color": "#770011ff",
   "gravity": -240.0,
   "player": {

@@ -17,9 +17,7 @@ class FloorBody(
         }
         groundBody = physicsEngine.getWorld().createBody(groundBodyDef)
         val groundShape = EdgeShape().apply {
-            set(-1000f, 0f, 1000f, 0f)
-
-            //set(0f, 0f, 1000f, 0f)
+            set(-1000f, 0f, 2000f, 0f)
         }
         groundBody.createFixture(groundShape, 0f)
         groundShape.dispose()

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.utils.Timer
+import dev.lionk.infojump.game.GameManager
 
 
 private const val TIME_STEP: Float = 1 / 60f
@@ -15,7 +16,7 @@ class PhysicsEngine(
     gravity:Float=-240f,
 ) {
     private val world = World(Vector2(0f, gravity), true)
-    private val teleportQueues = mutableListOf<TeleportRequest>()
+    private val teleportQueues = mutableListOf<Executable>()
     private val task: Timer.Task
 
     val contactListener = MyContactListener()
@@ -36,6 +37,16 @@ class PhysicsEngine(
         teleportQueues.add(request)
     }
 
+    fun setPlayerFrozen(playerFrozen:Boolean){
+        teleportQueues.add(
+            object : Executable {
+                override fun execute() {
+                    GameManager.getCurrentLevel().player.setFrozen(playerFrozen)
+                }
+            }
+        )
+    }
+
     fun update(delta: Float): Float {
 //        if(steps < 5) steps++
 //        else{
@@ -48,12 +59,7 @@ class PhysicsEngine(
 
         world.step(delta.coerceAtMost(0.25f), 6, 2)
         for (request in teleportQueues) {
-            if (request.body != null) {
-                request.body.setTransform(request.targetX, request.targetY, request.body.angle)
-                request.body.setLinearVelocity(0f, 0f) // Clear momentum
-                request.body.angularVelocity = 0f
-                request.body.isAwake = true
-            }
+            request.execute()
         }
         teleportQueues.clear()
         return accumulator/TIME_STEP
@@ -86,4 +92,17 @@ class PhysicsEngine(
     }
 }
 
-class TeleportRequest(val body: Body?, val targetX: Float, val targetY: Float)
+interface Executable{
+    fun execute()
+}
+class TeleportRequest(val body: Body?, val targetX: Float, val targetY: Float):Executable{
+    override fun execute() {
+        if (body != null) {
+            GameManager.game?.currentLevel?.physicsEngine?.contactListener?.reset()
+            body.setTransform(targetX, targetY, body.angle)
+            body.setLinearVelocity(0f, 0f) // Clear momentum
+            body.angularVelocity = 0f
+            body.isAwake = true
+        }
+    }
+}

@@ -13,6 +13,7 @@ import dev.lionk.infojump.utils.CommonData
 object GameManager {
     //                               Addresse, Spielername
     private val players = mutableMapOf<String, Player>()
+    private var gameStartTime = 0L
     fun addPlayer(address: String, name: String) {
         players[address] = Player(
             name = name,
@@ -60,6 +61,7 @@ object GameManager {
 
     fun startGame(){
         LionLog.info("Game starting...")
+        gameStartTime = System.currentTimeMillis()
         server.send(LionDeserialization.serialize(
             StartGamePayload(3)),
             listOf()
@@ -84,6 +86,8 @@ object GameManager {
     fun getPlayerByName(name: String): Player? {
         return getPlayers().find { it.name == name }
     }
+
+    fun getCurrentIngameTime(): Long = System.currentTimeMillis() - gameStartTime
 
     fun stopGame() {
         server.send(LionDeserialization.serialize(

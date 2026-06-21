@@ -12,6 +12,7 @@ class MyContactListener : ContactListener {
         private set
     var climbBlockContacts = 0
         private set
+    var lastContact:Long = 0
 
     override fun beginContact(contact: Contact) {
         if(hasData(contact, "feet") && getOther(contact, "feet")?.userData == null){
@@ -23,6 +24,10 @@ class MyContactListener : ContactListener {
         if(hasData(contact, "player")){
             ActionManager.handleAction(getOther(contact, "player"))
         }
+    }
+
+    fun reset(){
+        climbBlockContacts = 0
     }
 
     private fun hasData(contact: Contact, data: String): Boolean {
@@ -38,6 +43,9 @@ class MyContactListener : ContactListener {
     override fun endContact(contact: Contact) {
         if(hasData(contact, "feet") && getOther(contact, "feet")?.userData == null){
             footContacts--
+            if(footContacts == 0){
+                lastContact = System.currentTimeMillis()
+            }
         }
         if(hasData(contact, "feet") && getOther(contact, "feet")?.userData == "climbable"){
             climbBlockContacts--
@@ -45,6 +53,10 @@ class MyContactListener : ContactListener {
         if(hasData(contact, "player")){
             ActionManager.handleLeaveAction(getOther(contact, "player")?.userData as? String)
         }
+    }
+
+    fun timeSinceLastContact(): Long {
+        return System.currentTimeMillis() - lastContact
     }
 
     override fun preSolve(
