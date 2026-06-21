@@ -10,7 +10,6 @@ game/env/block/info.txt
 game/games/multiplayer_game.json
 game/games/singleplayer_game.json
 game/levels/example_level.json
-game/levels/example_level_2.json
 game/levels/example_sublevel.json
 game/levels/leon/example_level.json
 game/levels/leon/example_sublevel.json
@@ -19,6 +18,7 @@ game/levels/old/example_level.json
 game/levels/old/sublevel_1.json
 game/levels/sublevel_1.json
 game/levels/sublevel_2.json
+game/levels/sublevel_3.json
 game/levels/sublevels/nether_s1.json
 game/levels/sublevels/nether_s2.json
 game/levels/sublevels/ziel.json
@@ -44,38 +44,25 @@ game/objects/muenze.png
 game/objects/zielflagge.png
 game/partikel/checkpoint.p
 game/partikel/particle-star.png
-game/player/ninja - Kopie.png
 game/player/ninja.png
-game/player/ninja/Ninja laufanimation.png
 game/player/ninja/ninja.png
 game/player/ninja/ninja_mirrored.png
 game/player/ninja/ninja_overlay.png
 game/player/ninja/ninja_overlay_mirrored.png
 game/player/ninja/ninja_preset.png
 game/player/ninja/static.png
-game/player/ninja_mirrored - Kopie.png
 game/player/ninja_mirrored.png
 game/player/ninja_overlay.png
 game/player/ninja_overlay_mirrored.png
 game/player/ninja_preset.png
 game/player/position_arrow.png
-game/player/raeuber/raeuber static - Kopie (2).png
-game/player/raeuber/raeuber static - Kopie (3).png
-game/player/raeuber/raeuber static - Kopie (4).png
-game/player/raeuber/raeuber static - Kopie (5).png
-game/player/raeuber/raeuber static - Kopie (6).png
-game/player/raeuber/raeuber static - Kopie.png
-game/player/raeuber/raeuber static.png
 game/player/skelett.png
 game/player/skelett/skelett.png
-game/player/skelett2.png
 game/player/static.png
 hund.png
 menu/background.png
 menu/background2.png
 menu_multiplayer/background.png
-partikel/checkpoint.p
-partikel/particle-star.png
 ui/buttons/default.png
 ui/buttons/default_pressed.png
 ui/buttons/haken.png
@@ -86,7 +73,6 @@ ui/font-subtitle.fnt
 ui/font-window.fnt
 ui/font.fnt
 ui/pixelfont.ttf
-ui/pixelfont_alt.ttf
 ui/uiskin.atlas
 ui/uiskin.json
 ui/uiskin.png

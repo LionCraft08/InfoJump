@@ -1,0 +1,64 @@
+{
+  "name": "Zwischensequenz",
+  "id": 2,
+  "spawnPoint": {
+    "x": 10.0,
+    "y": 20.0
+  },
+  "gravity": -240.0,
+  "player": {
+    "texture": "game.player.ninja",
+    "jumpStrength": 8000.0,
+    "moveSpeed": 37.0
+  },
+  //Ab hier wirds relevant
+
+  "blocks": [
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 0.0,
+        "y": 10.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 20.0,
+        "y": 15.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 50.0,
+        "y": 20.0
+      },
+      "width": 10,
+      "height": 5
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 70.0,
+        "y": 13.0
+      },
+      "width": 10,
+      "height": 5,
+      "rotation": 0
+    },
+    {
+      "texture": "game.objects.blocks.holzblock",
+      "pos": {
+        "x": 95.0,
+        "y": 20.0
+      },
+      "width": 20,
+      "height": 5
+    }
+  ]
+}
