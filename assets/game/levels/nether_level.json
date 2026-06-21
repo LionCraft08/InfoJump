@@ -17,11 +17,11 @@
     {
       "texture": "game.objects.fluids.magma_block",
       "pos": {
-        "x": -30.0,
+        "x": -70.0,
         "y": 0.0
       },
       "onTouch": "death",
-      "width": 700,
+      "width": 1000,
       "height": 5
     },
     {

@@ -13,14 +13,14 @@
   },
   "nonSolidBlocks": [
     {
-      "texture": "game.objects.checkpoint_flagge",
+      "texture": "game.objects.zielflagge",
       "pos": {
         "x": 2.0,
         "y": 28.0
       },
       "onTouch": "ziel",
       "width": 8,
-      "height": 8
+      "height": 24
     }
   ],
   "blocks": [

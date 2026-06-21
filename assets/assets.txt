@@ -41,6 +41,7 @@ game/objects/herz.png
 game/objects/herz_weg.png
 game/objects/info.txt
 game/objects/muenze.png
+game/objects/zielflagge.png
 game/partikel/checkpoint.p
 game/partikel/particle-star.png
 game/player/ninja - Kopie.png
