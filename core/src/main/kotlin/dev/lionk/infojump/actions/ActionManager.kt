@@ -16,6 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kotlin.time.Duration.Companion.milliseconds
 
+/**
+ * Verwaltet alle Aktionen die Ausgeführt werden,
+ * wenn ein Spieler einen Block berührt
+ */
 object ActionManager {
     private val actions = mutableMapOf<String, (String?, Fixture?)-> Unit>()
     private val leaveActions = mutableMapOf<String, (String?)-> Unit>()

@@ -15,6 +15,10 @@ import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.logic.Timer
 import dev.lionk.infojump.rendering.TextureManager
 
+/**
+ * Ein Level, das alle Spiel-Relevanten Objekte
+ * für ein einzelnes Level beinhaltet
+ */
 class Level (
     val spawnPos: Pos,
     private val blocks: MutableList<AbstractBlock> = mutableListOf(),
@@ -38,7 +42,7 @@ class Level (
         player = ControlledPlayerEntity(physicsEngine = physicsEngine, initialPosition = spawnPos.toVector())
     }
 
-    val floor = FloorBody(physicsEngine)
+    val floor = if(levelPreset?.boden == true) FloorBody(physicsEngine) else null
 
     fun addBlock(block: AbstractBlock) {
         blocks.add(block)

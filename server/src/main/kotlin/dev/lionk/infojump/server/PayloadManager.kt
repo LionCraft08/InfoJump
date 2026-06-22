@@ -8,6 +8,9 @@ import dev.lionk.infojump.payloads.PlayerFinishPayload
 import dev.lionk.infojump.payloads.PlayerUpdatePayload
 import dev.lionk.infojump.payloads.ReadyPayload
 
+/**
+ * Sortiert einkommende TCP-Nachrichten und handelt entsprechend
+ */
 object PayloadManager {
     fun handleMessage(address: String, data: String){
         val wrapper =

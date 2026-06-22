@@ -5,6 +5,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.EdgeShape
 import dev.lionk.infojump.logic.PhysicsEngine
 
+/**
+ * Der Boden einer Welt.
+ * Muss im Level aktiviert sein
+ */
 class FloorBody(
     physicsEngine: PhysicsEngine,
 ) {

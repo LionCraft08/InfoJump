@@ -97,8 +97,11 @@ object MultiplayerManager {
                 players.clear()
                 players.addAll(payload.list)
                 val color = players.find { it.name == name }?.color
+                val type = players.find { it.name == name }?.character
                 if(color != null)
                     Settings.playerColor = Color(color.toInt())
+                if(type != null)
+                    Settings.texture = type
             }
             is ServerAssetsSendPayload -> {
                 serverAssets.clear()

@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureProvider
 import com.badlogic.gdx.graphics.glutils.FileTextureData
 import java.io.File
 
+/**
+ * Lädt Texturen und Dateien dynamisch
+ */
 object TextureManager {
     private val textures = mutableMapOf<String, Texture>()
     private fun addTexture(name:String){

@@ -27,9 +27,9 @@ fun main() {
 
 
         setWindowedMode(640, 480)
-        //// You can change these files; they are in lwjgl3/src/main/resources/ .
+        //// You chan change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .
-        setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
+        setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "iconx$it.png" }.toTypedArray()))
 
         //// This could improve compatibility with Windows machines with buggy OpenGL drivers, Macs
         //// with Apple Silicon that have to emulate compatibility with OpenGL anyway, and more.

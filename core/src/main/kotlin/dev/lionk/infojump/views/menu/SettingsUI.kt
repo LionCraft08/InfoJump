@@ -20,6 +20,9 @@ import dev.lionk.infojump.data.toKey
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.createFont
 
+/**
+ * Die EInstellungen im Haupt-Menü
+ */
 class SettingsUI(
     val stage: Stage
 ) {

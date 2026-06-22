@@ -10,8 +10,6 @@ import dev.lionk.infojump.multiplayer.MultiplayerManager
 import dev.lionk.infojump.rendering.TextureManager
 
 object LevelLoader {
-    private val gson = Gson()
-
     fun loadLevel(
         level: String,
         multiplayer: Boolean = false,

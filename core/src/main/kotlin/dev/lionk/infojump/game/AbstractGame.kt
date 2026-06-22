@@ -29,6 +29,8 @@ abstract class AbstractGame (
         }else{
             currentLevel = loadLevel(levels[currentLevelIndex])
         }
+
+        (Main.INSTANCE.getView() as? GameView)?.ui?.updateHealth()
     }
 
     fun finishGame(){

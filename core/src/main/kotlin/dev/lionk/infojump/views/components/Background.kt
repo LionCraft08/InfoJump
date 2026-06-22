@@ -1,19 +1,16 @@
 package dev.lionk.infojump.views.components
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Array
-import dev.lionk.infojump.LionLog
-import dev.lionk.infojump.rendering.TextureManager
 import kotlin.math.abs
 
 class Background(
     private val cloudTextures: Array<TextureRegion>?,
-    viewportWidth: Float, // Changed from mainCamera: OrthographicCamera
-    viewportHeight: Float // Changed from mainCamera: OrthographicCamera
+    viewportWidth: Float,
+    viewportHeight: Float
 ) {
     private class Cloud {
         var texture: TextureRegion? = null
@@ -32,24 +29,21 @@ class Background(
     var maxSpawnDelay: Float = 5.0f
     var minSpeed: Float = 2f // Pixels per second
     var maxSpeed: Float = 6f
-    var skyTopPadding: Float = 65f // How far down from the top edge clouds can spawn
+    var skyTopPadding: Float = 65f // Abstand von oben
 
     init {
         this.activeClouds = Array<Cloud>()
 
-        // Create a dedicated camera for the background matching the main camera's viewport
-        this.parallaxCamera = OrthographicCamera(viewportWidth, viewportHeight) // Use new parameters
+        this.parallaxCamera = OrthographicCamera(viewportWidth, viewportHeight)
 
         scheduleNextSpawn()
     }
 
     fun updateAndDraw(delta: Float, batch: SpriteBatch, mainCamera: OrthographicCamera) {
-        // 1. Update Parallax Camera (The 3D Effect)
-        // Moving the camera at half the position of the main camera creates a 0.5x speed parallax effect
         parallaxCamera.position.set(mainCamera.position.x * 0.5f, mainCamera.position.y * 0.5f, 0f)
         parallaxCamera.update()
 
-        // 2. Handle Spawning Logic
+        // Wolken Spawnen
         spawnTimer += delta
         if (spawnTimer >= nextSpawnTime) {
             spawnCloud()
@@ -57,21 +51,17 @@ class Background(
             scheduleNextSpawn()
         }
 
-        // 3. Update and Draw Clouds
         batch.setProjectionMatrix(parallaxCamera.combined)
         batch.begin()
         batch.setColor(1f, 1f, 1f, 1f)
 
-        // Iterate backwards so we can safely remove elements while looping
         for (i in activeClouds.size - 1 downTo 0) {
             val cloud = activeClouds.get(i)
 
-            // Move cloud to the right
             cloud.x += cloud.speed * delta
 
             batch.draw(cloud.texture, cloud.x, cloud.y, cloud.texture!!.regionWidth.toFloat()/2, cloud.texture!!.regionHeight.toFloat()/2)
 
-            // Despawn logic: Check if the cloud has passed the right edge of the parallax camera
             val rightCameraEdge = parallaxCamera.position.x + (parallaxCamera.viewportWidth / 2f)
             if (cloud.x > (rightCameraEdge+50)) {
                 activeClouds.removeIndex(i)
@@ -84,17 +74,11 @@ class Background(
     private fun spawnCloud() {
         if (cloudTextures == null || cloudTextures.isEmpty()) return
 
-
-        // Calculate spawn bounds based on the current parallax camera view
         val leftCameraEdge = parallaxCamera.position.x - (parallaxCamera.viewportWidth / 2f)
 
         val texture = cloudTextures.random()
 
-        // Spawn just outside the screen on the left
         val cloudX = leftCameraEdge - texture.getRegionWidth()
-
-        // Spawn at a random height near the top of the screen
-
 
         spawnCloud(cloudX, null, texture)
 
@@ -104,7 +88,7 @@ class Background(
         if (cloudTextures == null || cloudTextures.isEmpty) return
 
         val cloud = Cloud()
-        cloud.texture = texture?:cloudTextures.random() // Pick a random texture from the pool
+        cloud.texture = texture?:cloudTextures.random()
         cloud.speed = MathUtils.random(minSpeed, maxSpeed)
         cloud.x = x
 

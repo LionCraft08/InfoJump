@@ -16,6 +16,9 @@ import com.badlogic.gdx.utils.viewport.Viewport
 
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms. */
+/**
+ * Ursprüngliche Implementierung für Testzwecke. <b>Unused</b>
+ */
 class MainOld : ApplicationAdapter() {
     private lateinit var shapeRenderer: ShapeRenderer
     private lateinit var playerTexture: Texture

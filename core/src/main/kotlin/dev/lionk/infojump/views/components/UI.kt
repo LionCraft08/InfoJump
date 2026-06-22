@@ -35,10 +35,13 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-private const val SPLASH_SCREEN_TIME = 2500L
+private const val SPLASH_SCREEN_TIME = 2500L //wie lange eine Nachricht unten links angezeigt wird in ms
 
+/**
+ * Das Interface, das während des Spiels angezeigt wird.
+ */
 class UI (
-    private val level: Level? = GameManager.getCurrentLevel()
+    level: Level? = GameManager.getCurrentLevel()
 ){
     private val font: BitmapFont
     private var uiBatch: SpriteBatch = SpriteBatch()
@@ -109,7 +112,7 @@ class UI (
     }
 
     fun updateHealth(){
-        val currentHealth = level?.player?.getHealth()?:3
+        val currentHealth = GameManager.getCurrentLevel().player.getHealth()
         health.clear()
         for (i in 0..2) {
             if (i < currentHealth) {

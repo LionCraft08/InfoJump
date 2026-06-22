@@ -9,7 +9,10 @@ import kotlinx.coroutines.withContext
 
 val server: WebSocketServer = WebSocketServer(6789)
 
-
+/**
+ * Der Entrypoint des Servers
+ * Startet den TCP Endpoint und den Konsolen-Input
+ */
 suspend fun main() {
     LionLog.server("Loading assets")
     GameFileManager.ensureLoaded()

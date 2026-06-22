@@ -39,9 +39,3 @@ class InputField(
     fun getText() = input.text
 
 }
-
-class TextButton(
-
-){
-
-}

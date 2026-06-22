@@ -35,6 +35,9 @@ import kotlin.math.abs
 
 private const val CAMERA_MOVE_OFFSET = 25
 
+/**
+ * Die Haupt-Klasse für ein Spiel
+ */
 class GameView(
     hasMultiplayerGameAddon: Boolean = false,
     game: String = "singleplayer_game"

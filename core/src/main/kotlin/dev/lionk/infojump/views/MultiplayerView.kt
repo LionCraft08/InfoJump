@@ -29,6 +29,11 @@ import dev.lionk.infojump.tick.TickQueue
 import dev.lionk.infojump.views.components.InputField
 import dev.lionk.infojump.views.menu.MenuBackground
 
+/**
+ * Ansicht für den Multiplayer, beinhaltet
+ * - Bildschirm zum Ausfüllen von IP, Port, Name
+ * - Bereit-Bildschirm
+ */
 class MultiplayerView: AbstractView() {
     val stage: Stage = Stage(ScreenViewport())
     val background: MenuBackground = MenuBackground(stage, "menu_multiplayer.background")
@@ -62,11 +67,12 @@ class MultiplayerView: AbstractView() {
     init {
         Gdx.input.inputProcessor = stage
 
-
+        //Oben am Bildschirmrand, Stand der Verbindung
         infoTable.setFillParent(true)
         infoTable.top()
         infoTable.debug = Settings.isDebugging
 
+        //ausfüllbares Fenster, für IP, Port, Name
         loginTable.setFillParent(false)
         loginTable.setDebug(Settings.isDebugging)
         loginTable.center()
@@ -163,6 +169,9 @@ class MultiplayerView: AbstractView() {
 
     }
 
+    /**
+     * Der Text am oberen Bildschirmrand
+     */
     fun setInfoText(text: String, isError:Boolean?=false) {
         infoTable.clear()
         infoTable.add(
@@ -196,6 +205,9 @@ class MultiplayerView: AbstractView() {
 
     val playerListTable = Table()
 
+    /**
+     * Erstellt oder Aktualisiert die Ansicht aller Spieler mit "Bereit"-Haken
+     */
     private fun createMultiplayerView(
         players:List<Player>
     ){
@@ -231,9 +243,6 @@ class MultiplayerView: AbstractView() {
                             MultiplayerManager.sendReadyCheck()
                         }
                     })
-
-                    //background(buttonBackground)
-                    //background = buttonBackground
                 }
             )
             playerListTable.row()

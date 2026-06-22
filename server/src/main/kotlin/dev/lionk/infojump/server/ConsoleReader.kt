@@ -2,6 +2,10 @@ package dev.lionk.infojump.server
 
 import java.util.Scanner
 
+
+/**
+ * Liest Konsolen-Eingaben um das Spiel zu steuern
+ */
 object ConsoleReader {
     suspend fun startConsoleIn(){
         val scanner = Scanner(System.`in`)

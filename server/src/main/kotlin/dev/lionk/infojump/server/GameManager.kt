@@ -15,14 +15,15 @@ object GameManager {
     private val players = mutableMapOf<String, Player>()
     private var gameStartTime = 0L
     fun addPlayer(address: String, name: String) {
+        val character = if(availableCharacters.isNotEmpty()) {
+            val tmp = availableCharacters.first()
+            availableCharacters.removeFirst()
+            tmp
+        }else "ninja"
         players[address] = Player(
             name = name,
-            color = availableColors[nextColor++ % availableColors.size],
-            character = if(availableCharacters.isNotEmpty()) {
-                val tmp = availableCharacters.first()
-                availableCharacters.removeFirst()
-                tmp
-            }else "ninja",
+            color = if(character == "ninja") availableColors[nextColor++ % availableColors.size] else 0xffffffff,
+            character = character,
             ready = false
         )
         server.send(LionDeserialization.serialize(HandshakePayload(

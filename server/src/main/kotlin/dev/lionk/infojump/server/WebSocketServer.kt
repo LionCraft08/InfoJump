@@ -18,6 +18,9 @@ import io.netty.channel.group.ChannelGroup
 import io.netty.channel.group.DefaultChannelGroup
 import io.netty.util.concurrent.GlobalEventExecutor
 
+/**
+ * Standardisierte TCP Endpoint Klasse um Nachrichten auf unterster Ebene zu verwalten
+ */
 class WebSocketServer(
     val port: Int
 ) {

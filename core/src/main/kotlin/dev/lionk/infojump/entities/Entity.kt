@@ -15,9 +15,9 @@ abstract class Entity (
     physicsEngine: PhysicsEngine,
     fixedRotation: Boolean = true,
     initialPosition: Vector2 = Vector2(0f, 20f),
-    actualWidth: Float? = null,
+    val actualWidth: Float = 8f,
     description: String?=null,
-    actualHeight: Float = 10f
+    val actualHeight: Float = 10f
 ){
 
     private val texture = TextureManager.getTexture(textureID)
@@ -26,10 +26,13 @@ abstract class Entity (
         private set
 
     init {
-        if(actualWidth == null) {
-            val textureFactor = actualHeight / texture.height
-            sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
-        }else sprite.setSize(actualWidth, actualHeight)
+        val textureFactor = actualHeight / texture.height
+        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
+
+//        if(actualWidth == null) {
+//            val textureFactor = actualHeight / texture.height
+//            sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
+//        }else sprite.setSize(actualWidth, actualHeight)
 
         //sprite.setSize(texture.width.toFloat(), texture.height.toFloat())
         val bodyDef = BodyDef()
@@ -40,7 +43,7 @@ abstract class Entity (
 
 
         val shape = PolygonShape().apply {
-            setAsBox(sprite.width / 2f, sprite.height / 2f)
+            setAsBox(actualWidth!! / 2f, actualHeight / 2f)
 
         }
         val fixtureDef = FixtureDef().apply {

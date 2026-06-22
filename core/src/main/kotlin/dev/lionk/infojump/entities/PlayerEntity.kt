@@ -17,14 +17,18 @@ import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.views.GameView
 import kotlinx.coroutines.GlobalScope
+import kotlin.math.abs
 
 
 open class PlayerEntity (
     physicsEngine: PhysicsEngine,
     initialPosition: Vector2,
     private val healthAtStart: Int = 3,
-    private val color: Color = Settings.playerColor
-): Entity("game.player.ninja", physicsEngine, initialPosition = initialPosition, description = "player") {
+    private val color: Color? = Settings.playerColor
+): Entity("game.player.${Settings.texture}.${Settings.texture}", physicsEngine, initialPosition = initialPosition, description = "player") {
+
+    private val textures = TextureManager.getTextureSet("game.player.${Settings.texture}.${Settings.texture}")
+    val overlayTextures = TextureManager.getTextureSet("game.player.ninja.ninja_overlay")
 
     private val texture = TextureManager.getTexture("game.player.ninja_overlay")
     private val posIndicator = TextureManager.getTexture("game.player.position_arrow")
@@ -34,11 +38,12 @@ open class PlayerEntity (
     private var health: Int = healthAtStart
 
     init {
-//        val textureFactor = 10f / texture.height
-//        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
+        val textureFactor = actualHeight / texture.height
+        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
         posSprite.setScale(0.3f)
         overlaySprite.setSize(super.sprite.width, super.sprite.height)
-        colorSprite()
+        if(Settings.texture == "ninja")
+            colorSprite()
     }
 
     fun getHealth(): Int{
@@ -67,7 +72,10 @@ open class PlayerEntity (
 
 
     fun colorSprite(){
-        sprite.setColor(color)
+        if(color == null)
+            sprite.setColor(Color.WHITE)
+        else
+            sprite.setColor(color)
     }
 
     fun updateVelocity(
@@ -92,7 +100,42 @@ open class PlayerEntity (
         }
     }
 
+    var walking_step = 0
+    var isWalking:Boolean = false
+    var lastUpdate = 0f
+
+    fun updateWalkingStep(){
+        if(isWalking) {
+            walking_step++
+            if (walking_step >= textures.size) {
+                walking_step = 0
+                isWalking = false
+            }
+        }else{
+            walking_step = 0
+        }
+        super.sprite.texture = textures[walking_step]
+
+        if(Settings.texture == "ninja")
+            overlaySprite.texture = overlayTextures[walking_step]
+
+        lastUpdate = 0f
+    }
+
     override fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){
+        lastUpdate += Gdx.graphics.deltaTime
+
+        if(body.position.y < -5){
+            ActionManager.handleAction("death")
+        }
+
+        if(abs(overlaySprite.x - currentX()) > 0.05f){
+            isWalking = true
+        } else isWalking = false
+        if(lastUpdate >= 0.1f){
+            updateWalkingStep()
+        }
+
         overlaySprite.setPosition(
             currentX(),
             currentY()
@@ -103,7 +146,8 @@ open class PlayerEntity (
             posSprite.draw(spriteBatch)
         }
 
-        overlaySprite.draw(spriteBatch)
+        if(Settings.texture == "ninja")
+            overlaySprite.draw(spriteBatch)
 
     }
 
@@ -117,13 +161,14 @@ open class PlayerEntity (
     }
     private fun changeTexture(left: Boolean){
         if(left){
-            sprite.texture = TextureManager.getTexture("game.player.ninja_mirrored")
-            overlaySprite.texture = TextureManager.getTexture("game.player.ninja_overlay_mirrored")
-        }else{
-            sprite.texture = TextureManager.getTexture("game.player.ninja")
-            overlaySprite.texture = TextureManager.getTexture("game.player.ninja_overlay")
-        }
-        colorSprite()
+            super.sprite.setFlip(true, false)
+            overlaySprite.setFlip(true, false)
+      }else{
+            super.sprite.setFlip(false, false)
+            overlaySprite.setFlip(false, false)
+      }
+        if(Settings.texture == "ninja")
+            colorSprite()
     }
     override fun dispose(){
         super.dispose()

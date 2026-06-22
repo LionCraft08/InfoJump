@@ -12,6 +12,7 @@ object Settings {
         put(KeyAction.Left, Keys.LEFT)
         put(KeyAction.Right, Keys.RIGHT)
     }
+    var texture = "ninja"
 
     fun getAvailableColors():Map<String, Color>{
         return CommonData.getAvailableColors().mapValues { Color(it.value.toInt()) }

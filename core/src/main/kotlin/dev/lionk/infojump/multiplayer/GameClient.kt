@@ -13,6 +13,9 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.Socket
 
+/**
+ * TCP Client für Multiplayer-Verbindung
+ */
 class GameClient {
     private var socket: Socket? = null
     private var out: PrintWriter? = null

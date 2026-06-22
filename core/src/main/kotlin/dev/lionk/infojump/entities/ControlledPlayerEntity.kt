@@ -19,7 +19,7 @@ class ControlledPlayerEntity(
     private fun createBody(physicsEngine: PhysicsEngine) {
         // Foot sensor
         val footShape = PolygonShape().apply {
-            setAsBox(super.sprite.width / 2.05f, 0.1f, Vector2(0f, -sprite.height / 2f), 0f)
+            setAsBox(super.actualWidth / 2.05f, 0.1f, Vector2(0f, -super.actualHeight / 2f), 0f)
         }
         val footFixtureDef = FixtureDef().apply {
             shape = footShape

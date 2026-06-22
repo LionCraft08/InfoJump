@@ -18,43 +18,47 @@ import dev.lionk.infojump.rendering.TextureManager
 import dev.lionk.infojump.tick.TickManager
 import dev.lionk.infojump.views.createFont
 import javax.swing.Spring.width
+import kotlin.math.abs
 
 
 class MultiPlayerEntity(
     val textureID: String,
     initialPosition: Vector2 = Vector2(0f, 20f),
-    actualWidth: Float? = null,
+    actualWidth: Float = 8f,
     actualHeight: Float = 10f,
     val name: String,
-    val color: Color = Settings.playerColor
+    val color: Color? = Settings.playerColor
 ) {
-    private val font = createFont(32, color, borderSize = 1f)
+    private val font = createFont(32, color?:Color.WHITE, borderSize = 1f)
 
+    private val textures = TextureManager.getTextureSet(textureID)
+    val overlayTextures = TextureManager.getTextureSet("game.player.ninja.ninja_overlay")
     private val texture = TextureManager.getTexture(textureID)
     val sprite = Sprite(texture)
-    private val overlayTexture = TextureManager.getTexture("${textureID}_overlay")
+    private val overlayTexture = TextureManager.getTexture("game.player.ninja.ninja_overlay")
     private val overlaySprite = Sprite(overlayTexture)
     private var shouldBeRendered = true
     init {
         font.setUseIntegerPositions(false);
         //font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        if(actualWidth == null) {
-            val textureFactor = actualHeight / texture.height
-            sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
-        }else sprite.setSize(actualWidth, actualHeight)
-        colorSprite()
+        val textureFactor = actualHeight / texture.height
+        sprite.setSize(texture.width * textureFactor, texture.height * textureFactor)
+        if(textureID.endsWith("ninja"))
+            colorSprite()
         overlaySprite.setSize(sprite.width, sprite.height)
     }
 
     protected var previousPos: Pos = initialPosition.toPos()
     protected var currentPos: Pos = initialPosition.toPos()
-    private var lastUpdate: Long = 0
+    private var lastPosUpdate: Long = 0
 
     fun updatePos(currentPos: Pos, level: Int?) {
         if(level != GameManager.game?.currentLevelIndex) {
             shouldBeRendered = false
+        }else{
+            shouldBeRendered = true
         }
-        lastUpdate = System.currentTimeMillis()
+        lastPosUpdate = System.currentTimeMillis()
         this.previousPos = this.currentPos
         this.currentPos = currentPos
         if(previousPos.x - currentPos.x < 0) {
@@ -65,28 +69,65 @@ class MultiPlayerEntity(
     }
 
     fun colorSprite(){
-        sprite.setColor(color)
+        if(color == null)
+            sprite.setColor(Color.WHITE)
+        else
+            sprite.setColor(color)
     }
 
     fun dispose() {
 
     }
 
+    var walking_step = 0
+    var isWalking:Boolean = false
+    var lastUpdate = 0f
+
+    fun updateWalkingStep(){
+        if(isWalking) {
+            walking_step++
+            if (walking_step >= textures.size) {
+                walking_step = 0
+                isWalking = false
+            }
+        }else{
+            walking_step = 0
+        }
+        sprite.texture = textures[walking_step]
+
+        if(textureID.endsWith("ninja"))
+            overlaySprite.texture = overlayTextures[walking_step]
+
+        lastUpdate = 0f
+    }
+
+    private var previousRenderedX:Float = 0f
+
 
     fun render(spriteBatch: SpriteBatch, physicsAlpha: Float){
         if(!shouldBeRendered) return
 
-        val tickAlpha: Float = ((System.currentTimeMillis() - lastUpdate) / TickManager.tickRateMs.toFloat()).coerceAtMost(1f)
+        val tickAlpha: Float = ((System.currentTimeMillis() - lastPosUpdate) / TickManager.tickRateMs.toFloat()).coerceAtMost(1f)
         val renderX = MathUtils.lerp(previousPos.x, currentPos.x, tickAlpha) - (sprite.width / 2f)
         val renderY = MathUtils.lerp(previousPos.y, currentPos.y, tickAlpha) - (sprite.height / 2f)
+
+        lastUpdate += Gdx.graphics.deltaTime
+        if(abs(previousRenderedX - renderX) > 0.1f){
+            isWalking = true
+        } else isWalking = false
+        if(lastUpdate >= 0.1f){
+            updateWalkingStep()
+        }
 
         sprite.setPosition(renderX, renderY)
         overlaySprite.setPosition(renderX, renderY)
         sprite.draw(spriteBatch)
-        overlaySprite.draw(spriteBatch)
+        if(textureID.endsWith("ninja"))
+            overlaySprite.draw(spriteBatch)
         font.data.setScale(0.1f)
         font.draw(spriteBatch, name, renderX, renderY+(sprite.height + 2))
 
+        previousRenderedX = renderX
     }
 
     var isWalkingLeft = false
@@ -99,12 +140,13 @@ class MultiPlayerEntity(
     }
     private fun changeTexture(left: Boolean){
         if(left){
-            sprite.texture = TextureManager.getTexture("${textureID}_mirrored")
-            overlaySprite.texture = TextureManager.getTexture("${textureID}_overlay_mirrored")
+            sprite.setFlip(true, false)
+            overlaySprite.setFlip(true, false)
         }else{
-            sprite.texture = TextureManager.getTexture(textureID)
-            overlaySprite.texture = TextureManager.getTexture("${textureID}_overlay")
+            sprite.setFlip(false, false)
+            overlaySprite.setFlip(false, false)
         }
-        colorSprite()
+        if(textureID.endsWith("ninja"))
+            colorSprite()
     }
 }

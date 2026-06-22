@@ -16,7 +16,7 @@ class MultiplayerGameAddon(
         playerConfigs.forEach { config ->
             if(config.name != MultiplayerManager.name)
                 players[config.name] = MultiPlayerEntity(
-                    "game.player.ninja",
+                    "game.player.${config.character}.${config.character}",
                     level.spawnPos.toVector(),
                     name = config.name,
                     color = Color(config.color.toInt())

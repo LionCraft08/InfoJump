@@ -13,6 +13,10 @@ import dev.lionk.infojump.views.GameView
 import dev.lionk.infojump.views.MenuView
 import dev.lionk.infojump.views.MultiplayerView
 
+/**
+ * Verwaltet die verschiedenen Bildschirme.
+ * Aktuell verfügbar: game, multiplayer, multiplayer_game, menu
+ */
 class Main : Game() {
     private lateinit var currentView: AbstractView
 

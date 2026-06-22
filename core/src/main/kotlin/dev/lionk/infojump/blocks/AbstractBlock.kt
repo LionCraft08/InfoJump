@@ -6,6 +6,10 @@ import com.badlogic.gdx.physics.box2d.*
 import dev.lionk.infojump.logic.PhysicsEngine
 import dev.lionk.infojump.rendering.TextureManager
 
+/**
+ * Grundsätzliche Definition eines Blockes, inklusive Hitboxen
+ * und Texturen
+ */
 abstract class AbstractBlock (
     textureID: String,
     physicsEngine: PhysicsEngine,

@@ -3,6 +3,9 @@ package dev.lionk.infojump.server
 import dev.lionk.infojump.LionLog
 import java.io.File
 
+/**
+ * Zuständig dafür, die Spieldateien (Level) zu laden
+ */
 object GameFileManager {
 
     private val assets = mutableMapOf<String, String>()

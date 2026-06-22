@@ -21,6 +21,10 @@ import dev.lionk.infojump.views.menu.MenuBackground
 import dev.lionk.infojump.views.menu.SettingsUI
 
 
+/**
+ * Das Hauptmenu des Spiels.
+ * Beinhaltet Einstellungsmenü
+ */
 class MenuView(
     val onViewChange: (String)->Unit = {}
 ): AbstractView(
@@ -79,16 +83,19 @@ class MenuView(
         val settingsButton = TextButton("Einstellungen",textStyle)
 
 
+        //Singleplayer Button
         playButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 onViewChange("game")
             }
         })
+        //Einstellungs-Button
         settingsButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 settingsUI.toggle()
             }
         })
+        //Multiplayer Button
         multiplayerButton.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 Main.INSTANCE.changeView("multiplayer")
@@ -96,7 +103,7 @@ class MenuView(
         })
 
         //settingsButton.setX(100f, 1)
-        // Add the button to the loginTable
+        //Reihenfolge festlegen
         table.add(playButton).fillX().uniformX().pad(10f)//.actor.background(buttonBackground)
         table.row()
         table.add(multiplayerButton).fillX().uniformX().pad(10f)

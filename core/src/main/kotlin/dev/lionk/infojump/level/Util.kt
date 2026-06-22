@@ -20,6 +20,7 @@ fun Vector2.toPos(): Pos{
 data class LevelPreset(
     val name: String,
     val id: Int,
+    val boden:Boolean?=false,
     val spawnPoint: Pos,
     val color: String?=null,
     val buttons:List<String>?=null,
